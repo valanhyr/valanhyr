@@ -38,18 +38,24 @@ export class CvProjects extends BaseComponent {
                     display: grid;
                     grid-template-columns: repeat(3, minmax(0, 1fr));
                     gap: var(--space-md);
+                    align-items: stretch;
                 }
-                .p {
-                    background: var(--surface-2);
-                    border: var(--border-width) solid var(--text);
-                    padding: 1rem;
-                    display: grid;
-                    gap: var(--space-sm);
+
+                article {
+                    height: 100%;
                 }
+
+                ui-card {
+                    height: 100%;
+                }
+
                 h3 { margin: 0; font-family: monospace; font-weight: 900; }
                 p { margin: 0; }
+                ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
+                li { font-weight: 700; }
                 .stack { font-family: monospace; font-weight: 800; opacity: 0.85; }
                 .links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
                 a {
                     text-decoration: none;
                     color: var(--text);
@@ -59,6 +65,7 @@ export class CvProjects extends BaseComponent {
                     font-family: monospace;
                     font-weight: 900;
                 }
+
                 a:hover {
                     background: var(--secondary);
                     color: var(--on-accent);
@@ -75,25 +82,37 @@ export class CvProjects extends BaseComponent {
 
                     <div class="grid">
                         ${items.length ? items.map(p => `
-                            <article class="p">
-                                <h3>${p.name ?? 'Project'}</h3>
-                                <p>${p.description ?? 'Short description: problem, solution, and what you owned.'}</p>
-                                ${Array.isArray(p.highlights) && p.highlights.length ? `
-                                    <ul>
-                                        ${p.highlights.slice(0, 3).map(h => `<li>${h}</li>`).join('')}
-                                    </ul>
-                                ` : ''}
-                                ${Array.isArray(p.stack) && p.stack.length ? `<div class="stack">${p.stack.join(' • ')}</div>` : ''}
-                                <div class="links">
-                                    ${(Array.isArray(p.links) ? p.links : []).slice(0, 2).map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
-                                </div>
+                            <article>
+                                <ui-card surface="2" interactive>
+                                    <div slot="header">
+                                        <h3>${p.name ?? 'Project'}</h3>
+                                    </div>
+
+                                    <div>
+                                        <p>${p.description ?? 'Short description: problem, solution, and what you owned.'}</p>
+                                        ${Array.isArray(p.highlights) && p.highlights.length ? `
+                                            <ul>
+                                                ${p.highlights.slice(0, 3).map(h => `<li>${h}</li>`).join('')}
+                                            </ul>
+                                        ` : ''}
+                                        ${Array.isArray(p.stack) && p.stack.length ? `<div class="stack">${p.stack.join(' • ')}</div>` : ''}
+                                    </div>
+
+                                    <div slot="footer" class="links">
+                                        ${(Array.isArray(p.links) ? p.links : []).slice(0, 2).map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
+                                    </div>
+                                </ui-card>
                             </article>
                         `).join('') : `
-                            <article class="p">
-                                <h3>CV Website (Vanilla)</h3>
-                                <p>Neo-brutalist CV built with Web Components, data-driven JSON, and a canvas particle graph.</p>
-                                <div class="stack">HTML • CSS • JavaScript</div>
-                                <div class="links"><a href="#">Repo</a><a href="#">Demo</a></div>
+                            <article>
+                                <ui-card surface="2" interactive>
+                                    <div slot="header"><h3>CV Website (Vanilla)</h3></div>
+                                    <div>
+                                        <p>Neo-brutalist CV built with Web Components, data-driven JSON, and a canvas particle graph.</p>
+                                        <div class="stack">HTML • CSS • JavaScript</div>
+                                    </div>
+                                    <div slot="footer" class="links"><a href="#">Repo</a><a href="#">Demo</a></div>
+                                </ui-card>
                             </article>
                         `}
                     </div>
