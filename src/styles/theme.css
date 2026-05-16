@@ -1,14 +1,28 @@
 :root {
     --bg: #ffffff;
-    --surface: #f0f0f0;
+    --surface: #f7f7f7;
+    --surface-2: #ffffff;
+
+    /* Neon accents (use sparingly: CTAs + hover) */
     --primary: #ffff00; /* Neon Yellow */
     --secondary: #00ffff; /* Cyan */
     --accent: #ff00ff; /* Magenta */
-    --text: #000000;
-    --border-width: 4px;
-    --shadow-offset: 8px;
 
-    /* Keeping base spacing and typography for consistency if needed later */
+    --text: #000000;
+    --on-accent: #000000;
+
+    /* Softer neo-brutalism */
+    --border-width: 3px;
+    --shadow-offset: 6px;
+    --radius: 10px;
+
+    /* Motion + focus */
+    --dur-fast: 120ms;
+    --dur: 180ms;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --focus-ring: 3px solid var(--accent);
+
+    /* Keeping base spacing and typography for consistency */
     --space-xs: 0.25rem;
     --space-sm: 0.5rem;
     --space-md: 1rem;
@@ -17,4 +31,15 @@
 
     --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --font-size-base: 16px;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --bg: #0b0b0d;
+    --surface: #141418;
+    --surface-2: #1d1d22;
+
+    --text: #f5f5f5;
+    --on-accent: #0b0b0d;
 }

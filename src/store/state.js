@@ -19,6 +19,7 @@ export class Store {
 }
 
 export const store = new Store({
+    cv: null,
     selectedSkill: null,
     navigation: { path: '/' }
 });

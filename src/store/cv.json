@@ -1,0 +1,108 @@
+{
+  "basics": {
+    "name": "Your Name",
+    "role": "Software Developer",
+    "location": "Remote / Your City",
+    "summary": "I build reliable web experiences with a focus on performance, accessibility, and clean architecture.",
+    "status": "Open to opportunities"
+  },
+  "links": [
+    { "label": "GitHub", "href": "https://github.com/your-handle" },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/your-handle" },
+    { "label": "Email", "href": "mailto:you@example.com" }
+  ],
+  "navigation": [
+    { "label": "Home", "href": "#top" },
+    { "label": "About", "href": "#about" },
+    { "label": "Skills", "href": "#skills" },
+    { "label": "Experience", "href": "#experience" },
+    { "label": "Projects", "href": "#projects" },
+    { "label": "Education", "href": "#education" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "hero": {
+    "headline": "Modern web CV, built in vanilla.",
+    "subheadline": "No frameworks. Just clean HTML/CSS/JS, Web Components, and a strong focus on UX.",
+    "primaryCta": { "label": "Contact", "href": "#contact" },
+    "secondaryCta": { "label": "Download PDF", "href": "#" }
+  },
+  "about": {
+    "title": "About",
+    "paragraphs": [
+      "I build user-facing products with a strong focus on performance, accessibility, and maintainable systems.",
+      "I like pragmatic engineering: clear specs, measurable outcomes, and clean delivery."
+    ],
+    "highlights": [
+      "Performance-first mindset",
+      "Accessible by default",
+      "Clean, modular architecture",
+      "Fast iteration without hacks"
+    ]
+  },
+  "experience": [
+    {
+      "company": "Example Corp",
+      "role": "Frontend Engineer",
+      "period": "2023 — Present",
+      "location": "Remote",
+      "stack": ["HTML", "CSS", "JavaScript", "Node.js"],
+      "achievements": [
+        "Improved core flows UX and reduced UI regressions with stronger component boundaries.",
+        "Optimized critical screens, reducing perceived latency and improving responsiveness.",
+        "Partnered with design/product to ship features with a11y and performance baked in."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "CV Website (Vanilla)",
+      "description": "Neo-brutalist CV built with Web Components, JSON-driven content, and a canvas particle graph.",
+      "stack": ["HTML", "CSS", "JavaScript"],
+      "highlights": [
+        "ES Modules + Web Components",
+        "Zero framework / no bundler",
+        "Data-driven sections"
+      ],
+      "links": [
+        { "label": "Repo", "href": "#" },
+        { "label": "Demo", "href": "#" }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "org": "University / Bootcamp",
+      "title": "Software Engineering",
+      "period": "2019 — 2023",
+      "details": [
+        "Algorithms & data structures",
+        "Web architecture",
+        "Team projects"
+      ]
+    }
+  ],
+  "contact": {
+    "email": "you@example.com",
+    "cta": "Let’s build something great."
+  },
+  "graph": {
+    "palette": {
+      "frontend": "#3b82f6",
+      "backend": "#ef4444",
+      "tools": "#22c55e",
+      "ai": "#facc15"
+    },
+    "groups": {
+      "frontend": {
+        "core": ["HTML", "CSS", "JavaScript"],
+        "platform": ["Web Components", "Accessibility"]
+      },
+      "backend": ["Node.js", "REST", "SQL"],
+      "tools": ["Git", "CI/CD", "Jenkins", "Datadog"],
+      "ai": {
+        "methods": ["Spec-driven", "TDD"],
+        "tooling": ["LLM tooling"]
+      }
+    }
+  }
+}

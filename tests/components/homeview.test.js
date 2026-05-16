@@ -18,19 +18,20 @@ async function runTest() {
     try {
         const { HomeView } = await import('../../src/components/views/HomeView.js');
         const view = new HomeView();
-        
+
         if (!global.customElements.registry['home-view']) {
             throw new Error('home-view not registered');
         }
 
         view.connectedCallback();
 
-        if (!view.shadowRoot.innerHTML.includes('WELCOME TO THE LAB')) {
-            throw new Error('HomeView did not render title');
+        const html = view.shadowRoot.innerHTML;
+        for (const tag of ['hero-banner', 'cv-about', 'cv-skills', 'cv-experience', 'cv-projects', 'cv-education', 'cv-contact']) {
+            if (!html.includes(`<${tag}`)) {
+                throw new Error(`HomeView did not render ${tag}`);
+            }
         }
-        if (!view.shadowRoot.innerHTML.includes('<skill-graph>')) {
-            throw new Error('HomeView did not render skill-graph placeholder');
-        }
+
         console.log('✅ HomeView test passed!');
     } catch (err) {
         console.error('❌ HomeView test failed:', err.message);

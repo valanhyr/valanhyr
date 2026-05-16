@@ -18,7 +18,7 @@ async function runTest() {
     try {
         const { AppNavbar } = await import('../../src/components/layout/AppNavbar.js');
         const navbar = new AppNavbar();
-        
+
         // Ensure registry works
         if (!global.customElements.registry['app-navbar']) {
             throw new Error('app-navbar not registered');
@@ -26,9 +26,17 @@ async function runTest() {
 
         navbar.connectedCallback();
 
-        if (!navbar.shadowRoot.innerHTML.includes('PORTFOLIO.SYS')) {
-            throw new Error('AppNavbar did not render logo');
+        const html = navbar.shadowRoot.innerHTML;
+        if (!html.includes('<header>')) {
+            throw new Error('AppNavbar did not render header');
         }
+        if (!html.includes('CV.SYS') && !html.includes('Your Name')) {
+            throw new Error('AppNavbar did not render brand fallback');
+        }
+        if (!html.includes('aria-label="Primary"')) {
+            throw new Error('AppNavbar did not render primary nav');
+        }
+
         console.log('✅ AppNavbar test passed!');
     } catch (err) {
         console.error('❌ AppNavbar test failed:', err.message);
