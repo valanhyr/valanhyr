@@ -53,7 +53,27 @@ export class CvProjects extends BaseComponent {
                 p { margin: 0; }
                 ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
                 li { font-weight: 700; }
-                .stack { font-family: monospace; font-weight: 800; opacity: 0.85; }
+                .content {
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-sm);
+                }
+
+                .details {
+                    flex: 1;
+                    display: grid;
+                    gap: var(--space-sm);
+                    align-content: start;
+                }
+
+                .stack {
+                    margin-top: auto;
+                    font-family: monospace;
+                    font-weight: 800;
+                    opacity: 0.85;
+                }
+
                 .links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
                 a {
@@ -88,13 +108,16 @@ export class CvProjects extends BaseComponent {
                                         <h3>${p.name ?? 'Project'}</h3>
                                     </div>
 
-                                    <div>
-                                        <p>${p.description ?? 'Short description: problem, solution, and what you owned.'}</p>
-                                        ${Array.isArray(p.highlights) && p.highlights.length ? `
-                                            <ul>
-                                                ${p.highlights.slice(0, 3).map(h => `<li>${h}</li>`).join('')}
-                                            </ul>
-                                        ` : ''}
+                                    <div class="content">
+                                        <div class="details">
+                                            <p>${p.description ?? 'Short description: problem, solution, and what you owned.'}</p>
+                                            ${Array.isArray(p.highlights) && p.highlights.length ? `
+                                                <ul>
+                                                    ${p.highlights.slice(0, 3).map(h => `<li>${h}</li>`).join('')}
+                                                </ul>
+                                            ` : ''}
+                                        </div>
+
                                         ${Array.isArray(p.stack) && p.stack.length ? `<div class="stack">${p.stack.join(' • ')}</div>` : ''}
                                     </div>
 
@@ -107,8 +130,10 @@ export class CvProjects extends BaseComponent {
                             <article>
                                 <ui-card surface="2" interactive>
                                     <div slot="header"><h3>CV Website (Vanilla)</h3></div>
-                                    <div>
-                                        <p>Neo-brutalist CV built with Web Components, data-driven JSON, and a canvas particle graph.</p>
+                                    <div class="content">
+                                        <div class="details">
+                                            <p>Neo-brutalist CV built with Web Components, data-driven JSON, and a canvas particle graph.</p>
+                                        </div>
                                         <div class="stack">HTML • CSS • JavaScript</div>
                                     </div>
                                     <div slot="footer" class="links"><a href="#">Repo</a><a href="#">Demo</a></div>
