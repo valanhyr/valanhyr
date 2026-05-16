@@ -70,7 +70,7 @@
     },
     {
       "name": "Mana Forge (Full Stack Monorepo)",
-      "description": "Premodern MTG deck analysis platform with a React UI, a Spring Boot REST API, and a stateless FastAPI AI engine (Groq Llama 3.3) delivering structured JSON insights.",
+      "description": "MTG deck analysis platform with a React UI, a Spring Boot REST API, and a stateless FastAPI AI engine (Groq Llama 3.3) delivering structured JSON insights.",
       "stack": [
         "React",
         "TypeScript",
