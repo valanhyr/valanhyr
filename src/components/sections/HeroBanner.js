@@ -17,6 +17,7 @@ export class HeroBanner extends BaseComponent {
 
         const headline = cv?.hero?.headline ?? 'Modern web CV, built in vanilla.';
         const subheadline = cv?.hero?.subheadline ?? 'Professional, fast, accessible — without frameworks.';
+        const proofs = Array.isArray(cv?.hero?.proofs) ? cv.hero.proofs : [];
 
         const primary = cv?.hero?.primaryCta ?? { label: 'Contact', href: '#contact' };
         const secondary = cv?.hero?.secondaryCta ?? { label: 'Download PDF', href: '#' };
@@ -76,6 +77,9 @@ export class HeroBanner extends BaseComponent {
 
                 p { margin: 0; }
 
+                .proofs { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
+                .proofs li { font-weight: 800; }
+
                 .ctaRow {
                     display: flex;
                     gap: var(--space-sm);
@@ -111,6 +115,11 @@ export class HeroBanner extends BaseComponent {
 
                     <h1>${headline}</h1>
                     <p>${subheadline}</p>
+                    ${proofs.length ? `
+  <ul class="proofs">
+    ${proofs.slice(0, 3).map(p => `<li>${p}</li>`).join('')}
+  </ul>
+` : ''}
 
                     <div class="ctaRow">
                         <ui-button variant="primary" href="${primary.href}">${primary.label}</ui-button>
