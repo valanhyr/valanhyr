@@ -128,15 +128,13 @@ export class CvProjects extends BaseComponent {
                             </article>
                         `).join('') : `
                             <article>
-                                <ui-card surface="2" interactive>
-                                    <div slot="header"><h3>CV Website (Vanilla)</h3></div>
+                                <ui-card surface="2">
+                                    <div slot="header"><h3>No projects yet</h3></div>
                                     <div class="content">
                                         <div class="details">
-                                            <p>Neo-brutalist CV built with Web Components, data-driven JSON, and a canvas particle graph.</p>
+                                            <p>Add 2–3 selected projects in <code>src/store/cv.json</code>.</p>
                                         </div>
-                                        <div class="stack">HTML • CSS • JavaScript</div>
                                     </div>
-                                    <div slot="footer" class="links"><a href="#">Repo</a><a href="#">Demo</a></div>
                                 </ui-card>
                             </article>
                         `}

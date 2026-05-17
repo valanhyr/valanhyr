@@ -83,18 +83,10 @@ export class CvExperience extends BaseComponent {
                         `).join('') : `
                             <article class="item">
                                 <div class="row">
-                                    <div>
-                                        <div class="company">Example Corp</div>
-                                        <div class="role">Frontend Engineer</div>
-                                    </div>
-                                    <div class="period">2023 — Present • Remote</div>
+                                    <div class="company">Experience</div>
+                                    <div class="period">Add entries in cv.json</div>
                                 </div>
-                                <ul>
-                                    <li>Built UI systems with strong accessibility standards.</li>
-                                    <li>Improved performance and stability with measurable impact.</li>
-                                    <li>Collaborated across product, design, and backend teams.</li>
-                                </ul>
-                                <div class="stack">Stack: HTML • CSS • JS • Node</div>
+                                <div class="hint">No experience entries yet. Add them in <code>src/store/cv.json</code>.</div>
                             </article>
                         `}
                     </div>

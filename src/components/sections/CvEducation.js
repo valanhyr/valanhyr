@@ -60,15 +60,12 @@ export class CvEducation extends BaseComponent {
                             <article class="item">
                                 <div class="row">
                                     <div>
-                                        <div class="org">University / Bootcamp</div>
-                                        <div class="title">Computer Science / Software Engineering</div>
+                                        <div class="org">Education</div>
+                                        <div class="title">Optional</div>
                                     </div>
-                                    <div class="period">2019 — 2023</div>
+                                    <div class="period">—</div>
                                 </div>
-                                <ul>
-                                    <li>Core CS fundamentals + web engineering.</li>
-                                    <li>Optional: certifications, courses, workshops.</li>
-                                </ul>
+                                <div class="hint">Add education/certifications in <code>src/store/cv.json</code> (optional).</div>
                             </article>
                         `}
                     </div>
