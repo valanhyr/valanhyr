@@ -1,3 +1,4 @@
+// src/components/views/HomeView.js
 import { BaseComponent } from '../BaseComponent.js';
 
 export class HomeView extends BaseComponent {
@@ -15,6 +16,7 @@ export class HomeView extends BaseComponent {
 
                 /* Anchor targets must be in the light DOM (not inside Shadow DOM). */
                 cv-about,
+                cv-platform,
                 cv-skills,
                 cv-experience,
                 cv-projects,
@@ -27,6 +29,7 @@ export class HomeView extends BaseComponent {
             <main id="top">
                 <hero-banner></hero-banner>
                 <cv-about id="about"></cv-about>
+                <cv-platform id="platform"></cv-platform>
                 <cv-skills id="skills"></cv-skills>
                 <cv-experience id="experience"></cv-experience>
                 <cv-projects id="projects"></cv-projects>
