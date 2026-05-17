@@ -14,6 +14,7 @@
   "navigation": [
     { "label": "Home", "href": "#top" },
     { "label": "About", "href": "#about" },
+    { "label": "Platform", "href": "#platform" },
     { "label": "Skills", "href": "#skills" },
     { "label": "Experience", "href": "#experience" },
     { "label": "Projects", "href": "#projects" },
@@ -21,10 +22,24 @@
     { "label": "Contact", "href": "#contact" }
   ],
   "hero": {
-    "headline": "Modern web CV, built in vanilla.",
-    "subheadline": "No frameworks. Just clean HTML/CSS/JS, Web Components, and a strong focus on UX.",
+    "headline": "Evolución técnica de producto web en producción",
+    "subheadline": "Microfrontends, design systems y delivery sin perder velocidad.",
     "primaryCta": { "label": "Contact", "href": "#contact" },
-    "secondaryCta": { "label": "Download PDF", "href": "#" }
+    "secondaryCta": { "label": "Download PDF", "href": "#" },
+    "proofs": [
+      "Design system + librería consumida por microfronts",
+      "Arquitectura técnica y evolución incremental sobre web existente",
+      "Visión end-to-end: entornos, pipelines, prácticas de entrega"
+    ]
+  },
+  "platform": {
+    "title": "Platform & Architecture",
+    "bullets": [
+      "Definí patrones de integración y contratos para microfrontends.",
+      "Construí/extendí librería de estilos + componentes reutilizables.",
+      "Evolucioné aplicaciones existentes con foco en estabilidad y DX.",
+      "Contribuí a pipelines/entornos para mejorar delivery y confiabilidad."
+    ]
   },
   "about": {
     "title": "About",
