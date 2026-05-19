@@ -17,10 +17,8 @@ export class CvExperience extends BaseComponent {
             const rect = container.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
             
-            // Punto de activación: cuando el elemento llega al 70% de la pantalla (más natural)
             const triggerPoint = viewportHeight * 0.7;
             
-            // Calculamos cuánto hemos progresado en el contenedor
             let progress = 0;
             if (rect.top < triggerPoint) {
                 const totalHeight = rect.height;
@@ -30,7 +28,6 @@ export class CvExperience extends BaseComponent {
 
             container.style.setProperty('--scroll-progress', `${progress}%`);
 
-            // Marcamos los slots como 'reached' (alcanzados) si el progreso los ha pasado
             const slots = this.shadowRoot.querySelectorAll('.timeline-slot');
             slots.forEach(slot => {
                 const slotRect = slot.getBoundingClientRect();
@@ -43,7 +40,6 @@ export class CvExperience extends BaseComponent {
         };
 
         window.addEventListener('scroll', handleScroll, { passive: true });
-        // Usamos un pequeño timeout para asegurar que el DOM está listo
         setTimeout(handleScroll, 100);
     }
 
@@ -70,88 +66,92 @@ export class CvExperience extends BaseComponent {
                     text-transform: uppercase;
                 }
                 .hint {
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.75;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    opacity: 0.5;
+                    font-size: 0.8rem;
                 }
                 .timeline {
                     display: grid;
-                    gap: var(--space-md);
+                    gap: 2rem;
                     position: relative;
                     padding-left: 3rem;
                 }
 
-                /* The background thin line */
                 .timeline::before {
                     content: "";
                     position: absolute;
                     left: 1.5rem;
                     top: 0;
                     bottom: 0;
-                    width: 2px;
-                    background: var(--text);
-                    opacity: 0.2;
+                    width: 1px;
+                    background: var(--glass-border);
                     transform: translateX(-50%);
                 }
 
-                /* The growing progress line */
                 .progress-line {
                     position: absolute;
                     left: 1.5rem;
                     top: 0;
-                    width: 6px;
+                    width: 2px;
                     height: var(--scroll-progress, 0%);
-                    background: var(--text);
+                    background: var(--primary);
                     transform: translateX(-50%);
                     transition: height 0.15s ease-out;
-                    box-shadow: 0 0 15px var(--secondary);
+                    box-shadow: 0 0 15px var(--primary);
                     z-index: 2;
                 }
 
-                /* Container for Node + Card */
                 .timeline-slot {
                     position: relative;
                     display: grid;
+                    opacity: 0;
+                    transform: translateX(20px);
+                    transition: all 0.6s var(--ease);
+                }
+
+                .timeline-slot.reached {
+                    opacity: 1;
+                    transform: translateX(0);
                 }
 
                 .item {
-                    background: var(--surface-2);
-                    border: var(--border-width) solid var(--text);
-                    padding: 1.2rem;
-                    transition: all 0.4s var(--ease);
+                    background: var(--surface);
+                    box-shadow: 4px 4px 8px var(--shadow-dark), 
+                                -4px -4px 8px var(--shadow-light);
+                    border: 1px solid rgba(255,255,255,0.02);
+                    padding: 1.5rem;
+                    border-radius: var(--radius);
+                    transition: all var(--dur) var(--ease);
                     z-index: 5;
                 }
 
                 .item:hover {
-                    transform: translateX(12px);
-                    background: var(--surface);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
+                    transform: translateX(10px);
+                    border-color: rgba(255, 255, 255, 0.05);
+                    box-shadow: 8px 8px 16px var(--shadow-dark), 
+                                -8px -8px 16px var(--shadow-light);
                 }
 
-                /* The node dot - Truly Anchored to the line */
                 .node {
                     position: absolute;
-                    left: -1.5rem; /* Corrected: compensates for 3rem padding-left */
-                    top: 1.8rem;
-                    width: 1.2rem;
-                    height: 1.2rem;
-                    background: var(--surface-2);
-                    border: var(--border-width) solid var(--text);
+                    left: -1.5rem;
+                    top: 2rem;
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    background: var(--bg);
+                    border: 1px solid var(--glass-border);
                     border-radius: 50%;
                     transform: scale(1) translateX(-50%);
-                    transform-origin: center center;
                     transition: all 0.3s var(--ease);
                     z-index: 10;
-                    pointer-events: none;
                 }
 
-                /* Highlight node when progress reaches it or hover */
-                .timeline-slot.reached .node,
-                .timeline-slot:hover .node {
-                    box-shadow: 0 0 15px var(--secondary);
-                    background: var(--secondary);
-                    transform: scale(1.3) translateX(-50%);
-                    border-color: var(--text);
+                .timeline-slot.reached .node {
+                    box-shadow: 0 0 10px var(--primary);
+                    background: var(--primary);
+                    border-color: var(--primary);
+                    transform: scale(1.2) translateX(-50%);
                 }
 
                 .row {
@@ -159,21 +159,37 @@ export class CvExperience extends BaseComponent {
                     justify-content: space-between;
                     gap: var(--space-md);
                     flex-wrap: wrap;
-                    margin-bottom: var(--space-sm);
+                    margin-bottom: 1rem;
                 }
-                .role { font-weight: 900; }
-                .company { font-family: monospace; font-weight: 900; text-transform: uppercase; }
-                .period { font-family: monospace; font-weight: 800; opacity: 0.8; }
-                ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
-                li { font-weight: 700; }
-                .stack { margin-top: var(--space-sm); font-family: monospace; font-weight: 800; opacity: 0.85; }
+                .role { font-weight: 800; font-size: 1.1rem; }
+                .company { 
+                    font-family: var(--font-mono); 
+                    font-weight: 700; 
+                    text-transform: uppercase; 
+                    color: var(--secondary);
+                }
+                .period { 
+                    font-family: var(--font-mono); 
+                    font-weight: 500; 
+                    opacity: 0.5; 
+                    font-size: 0.8rem;
+                }
+                ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.5rem; color: var(--text-dim); }
+                li { font-weight: 500; font-size: 0.95rem; }
+                
+                .stack { 
+                    margin-top: 1.5rem; 
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.4rem;
+                }
             </style>
 
             <section id="experience" aria-label="Experience">
                 <ui-card>
                     <div class="top">
                         <h2>Experience</h2>
-                        <div class="hint">CV / Timeline</div>
+                        <div class="hint">CV // System Timeline</div>
                     </div>
 
                     <div class="timeline">
@@ -192,11 +208,15 @@ export class CvExperience extends BaseComponent {
                                     <ul>
                                         ${(Array.isArray(it.achievements) ? it.achievements : []).slice(0, 6).map(a => `<li>${a}</li>`).join('')}
                                     </ul>
-                                    ${Array.isArray(it.stack) && it.stack.length ? `<div class="stack">Stack: ${it.stack.join(' • ')}</div>` : ''}
+                                    ${Array.isArray(it.stack) && it.stack.length ? `
+                                        <div class="stack">
+                                            ${it.stack.map(s => `<ui-tag variant="default">${s}</ui-tag>`).join('')}
+                                        </div>
+                                    ` : ''}
                                 </article>
                             </div>
                         `).join('') : `
-                            <div class="timeline-slot">
+                            <div class="timeline-slot reached">
                                 <span class="node"></span>
                                 <article class="item">
                                     <div class="row">
@@ -211,7 +231,12 @@ export class CvExperience extends BaseComponent {
                                         <li>Improved performance and stability with measurable impact.</li>
                                         <li>Collaborated across product, design, and backend teams.</li>
                                     </ul>
-                                    <div class="stack">Stack: HTML • CSS • JS • Node</div>
+                                    <div class="stack">
+                                        <ui-tag>HTML</ui-tag>
+                                        <ui-tag>CSS</ui-tag>
+                                        <ui-tag>JS</ui-tag>
+                                        <ui-tag>Node</ui-tag>
+                                    </div>
                                 </article>
                             </div>
                         `}

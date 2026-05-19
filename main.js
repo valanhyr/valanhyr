@@ -3,6 +3,7 @@ import './src/components/views/HomeView.js';
 
 import './src/components/ui/UiButton.js';
 import './src/components/ui/UiCard.js';
+import './src/components/ui/UiTag.js';
 
 import './src/components/graph/ParticleGraph.js';
 import './src/components/sections/HeroBanner.js';

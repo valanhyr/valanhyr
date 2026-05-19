@@ -45,23 +45,21 @@ export class UiCard extends BaseComponent {
                     flex-direction: column;
 
                     background: var(--surface);
-                    border: var(--border-width) solid var(--text);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
+                    box-shadow: 6px 6px 12px var(--shadow-dark), 
+                                -6px -6px 12px var(--shadow-light);
+                    border: 1px solid rgba(255,255,255,0.02);
                     padding: 1.5rem;
+                    border-radius: var(--radius);
 
-                    transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+                    transition: all var(--dur) var(--ease);
                 }
 
                 :host([surface="2"]) .card {
                     background: var(--surface-2);
                 }
 
-                :host([rounded]) .card {
-                    border-radius: var(--radius);
-                }
-
                 .header {
-                    margin-bottom: var(--space-md);
+                    margin-bottom: 1rem;
                 }
 
                 .body {
@@ -70,7 +68,7 @@ export class UiCard extends BaseComponent {
                 }
 
                 .footer {
-                    margin-top: var(--space-md);
+                    margin-top: 1rem;
                 }
 
                 :host(:not([data-has-header])) .header {
@@ -83,12 +81,16 @@ export class UiCard extends BaseComponent {
                     margin-top: 0;
                 }
 
-                ${interactive ? `
-                .card:hover {
-                    transform: translate(-2px, -2px);
-                    box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0px var(--text);
+                :host([interactive]) .card {
+                    cursor: pointer;
                 }
-                ` : ''}
+
+                :host([interactive]) .card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                                -10px -10px 20px var(--shadow-light);
+                    border-color: rgba(255, 255, 255, 0.05);
+                }
             </style>
             <div class="card">
                 <div class="header" part="header"><slot name="header"></slot></div>

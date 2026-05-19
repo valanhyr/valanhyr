@@ -6,34 +6,44 @@
 
 body {
     font-family: var(--font-main);
-    font-size: var(--font-size-base);
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.5;
     padding: 2rem;
+    transition: background-color var(--dur) var(--ease);
 }
 
 #app {
     min-height: 100vh;
 }
 
-.brutalist-card {
+.neumorphic-flat {
     background: var(--surface);
-    border: var(--border-width) solid var(--text);
-    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
-    padding: 1.5rem;
-    transition: transform 0.1s;
+    box-shadow: 6px 6px 12px var(--shadow-dark), 
+                -6px -6px 12px var(--shadow-light);
+    border: 1px solid rgba(255,255,255,0.02);
+    border-radius: var(--radius);
 }
 
-.brutalist-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0px var(--text);
+.neumorphic-inset {
+    background: var(--surface);
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+    border-radius: var(--radius);
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
 }
 
 code {
-    background-color: var(--surface);
+    font-family: var(--font-mono);
+    background-color: var(--surface-2);
     padding: 0.2rem 0.4rem;
-    border: 2px solid var(--text);
+    border-radius: 4px;
 }
 
 /* Scroll Reveal Animations */
@@ -47,4 +57,9 @@ code {
 .reveal-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }

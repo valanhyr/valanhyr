@@ -33,37 +33,39 @@ export class CvProjects extends BaseComponent {
                 }
 
                 .hint {
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.75;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    opacity: 0.5;
+                    font-size: 0.8rem;
                 }
 
-                /* Acordeón Container */
                 .accordion {
                     display: flex;
                     width: 100%;
-                    height: 400px;
-                    gap: var(--space-sm);
-                    margin-top: var(--space-md);
+                    height: 440px;
+                    gap: 1rem;
+                    margin-top: 1.5rem;
                 }
 
-                /* Individual Project Card */
                 .project-card {
                     flex: 1;
                     position: relative;
                     overflow: hidden;
-                    border: var(--border-width) solid var(--text);
+                    border: 1px solid var(--glass-border);
                     background: var(--surface-2);
-                    transition: all 0.6s var(--ease);
+                    border-radius: var(--radius);
+                    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
                     cursor: pointer;
                     display: flex;
                     flex-direction: column;
                 }
 
-                /* Comportamiento Dinámico: Solo uno expandido */
                 .project-card.active {
-                    flex: 4;
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
+                    flex: 5;
+                    background: var(--surface);
+                    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                                -10px -10px 20px var(--shadow-light);
+                    border-color: rgba(255, 255, 255, 0.05);
                 }
 
                 .accordion:hover .project-card {
@@ -72,16 +74,17 @@ export class CvProjects extends BaseComponent {
                 }
 
                 .accordion .project-card:hover {
-                    flex: 4;
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
+                    flex: 5;
                     background: var(--surface);
+                    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                                -10px -10px 20px var(--shadow-light);
+                    border-color: rgba(255, 255, 255, 0.05);
                 }
 
-                /* Visuals */
                 .card-bg {
                     width: 100%;
                     height: 100%;
-                    background: var(--surface);
+                    background: linear-gradient(45deg, #111, #080808);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -89,90 +92,83 @@ export class CvProjects extends BaseComponent {
                     position: relative;
                 }
 
-                .project-card:hover .card-bg,
-                .accordion:not(:hover) .project-card.active .card-bg {
-                    height: 40%;
-                    border-bottom: var(--border-width) solid var(--text);
+                .accordion:not(:hover) .project-card.active .card-bg,
+                .project-card:hover .card-bg {
+                    height: 35%;
+                    border-bottom: 1px solid var(--glass-border);
                 }
 
-                .project-card:hover .card-bg::after,
-                .accordion:not(:hover) .project-card.active .card-bg::after {
+                .accordion:not(:hover) .project-card.active .card-bg::after,
+                .project-card:hover .card-bg::after {
                     content: "";
                     position: absolute;
                     inset: 0;
-                    background: var(--secondary);
-                    opacity: 0.1;
+                    background: linear-gradient(to bottom, transparent, rgba(0, 255, 255, 0.05));
                 }
 
                 .card-label {
                     position: absolute;
-                    bottom: var(--space-md);
-                    left: var(--space-md);
-                    font-family: monospace;
-                    font-weight: 900;
-                    background: var(--text);
-                    color: var(--bg);
-                    padding: 0.25rem 0.5rem;
-                    transform-origin: left bottom;
-                    transition: transform 0.4s var(--ease);
+                    bottom: 1.5rem;
+                    left: 1.5rem;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    background: var(--primary);
+                    color: var(--on-accent);
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 4px;
+                    transition: all 0.4s var(--ease);
                     z-index: 10;
                     white-space: nowrap;
+                    font-size: 0.7rem;
+                    box-shadow: 0 0 10px var(--primary);
                 }
 
-                .project-card:hover .card-label,
-                .accordion:not(:hover) .project-card.active .card-label {
-                    transform: scale(1.2) translateY(-140px);
+                .accordion:not(:hover) .project-card.active .card-label,
+                .project-card:hover .card-label {
+                    transform: scale(1.1) translateY(-100px);
                 }
 
                 .card-content {
-                    padding: var(--space-md);
+                    padding: 1.5rem;
                     opacity: 0;
                     transform: translateY(20px);
                     transition: all 0.4s var(--ease);
                     flex: 1;
                     display: flex;
                     flex-direction: column;
-                    gap: var(--space-xs);
+                    gap: 0.75rem;
                     overflow: hidden;
                     pointer-events: none;
                 }
 
-                .project-card:hover .card-content,
-                .accordion:not(:hover) .project-card.active .card-content {
+                .accordion:not(:hover) .project-card.active .card-content,
+                .project-card:hover .card-content {
                     opacity: 1;
                     transform: translateY(0);
                     pointer-events: auto;
                 }
 
-                h3 { margin: 0; font-family: monospace; font-weight: 900; font-size: 1.2rem; }
-                p { margin: 0; font-size: 0.9rem; line-height: 1.4; }
+                h3 { margin: 0; font-weight: 800; font-size: 1.4rem; color: var(--text); }
+                p { margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--text-dim); }
                 
                 .stack {
                     margin-top: auto;
-                    font-family: monospace;
-                    font-size: 0.8rem;
-                    font-weight: 800;
-                    opacity: 0.85;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.4rem;
                 }
 
-                .links { display: flex; gap: 0.5rem; margin-top: var(--space-xs); }
-                a {
-                    text-decoration: none;
-                    color: var(--text);
-                    border: 1px solid var(--text);
-                    padding: 0.15rem 0.4rem;
-                    background: var(--bg);
-                    font-family: monospace;
-                    font-size: 0.75rem;
-                    font-weight: 900;
+                .links { 
+                    display: flex; 
+                    gap: 0.75rem; 
+                    margin-top: 1rem; 
                 }
-                a:hover { background: var(--primary); }
 
                 @media (max-width: 768px) {
                     .accordion { flex-direction: column; height: auto; }
-                    .project-card { height: 120px; flex: none !important; }
-                    .project-card.active, .project-card:hover { height: 280px; }
-                    .card-label { transform: none !important; bottom: auto; top: var(--space-sm); right: var(--space-sm); left: auto; }
+                    .project-card { height: 100px; flex: none !important; }
+                    .accordion:not(:hover) .project-card.active, .project-card:hover { height: 320px; }
+                    .card-label { transform: none !important; bottom: auto; top: 1rem; right: 1rem; left: auto; }
                 }
             </style>
 
@@ -180,33 +176,41 @@ export class CvProjects extends BaseComponent {
                 <ui-card>
                     <div class="top">
                         <h2>Projects</h2>
-                        <div class="hint">CV / Selected work</div>
+                        <div class="hint">CV // System Portfolio</div>
                     </div>
 
                     <div class="accordion">
                         ${items.length ? items.map((p, index) => `
                             <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
                                 <div class="card-bg">
-                                    <div class="card-label">PROYECTO ${String(index + 1).padStart(2, '0')}</div>
+                                    <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
                                 </div>
                                 <div class="card-content">
                                     <h3>${p.name ?? 'Project'}</h3>
                                     <p>${p.description ?? ''}</p>
-                                    ${Array.isArray(p.stack) && p.stack.length ? `<div class="stack">${p.stack.join(' • ')}</div>` : ''}
+                                    ${Array.isArray(p.stack) && p.stack.length ? `
+                                        <div class="stack">
+                                            ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
+                                        </div>
+                                    ` : ''}
                                     <div class="links">
-                                        ${(Array.isArray(p.links) ? p.links : []).map(l => `<a href="${l.href}" target="_blank">${l.label}</a>`).join('')}
+                                        ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
                                     </div>
                                 </div>
                             </div>
                         `).join('') : `
                             <div class="project-card active">
                                 <div class="card-bg">
-                                    <div class="card-label">CV WEBSITE</div>
+                                    <div class="card-label">PROTO.SITE</div>
                                 </div>
                                 <div class="card-content">
-                                    <h3>Portfolio (Vanilla JS)</h3>
-                                    <p>Neo-brutalist CV built with Web Components and data-driven JSON.</p>
-                                    <div class="stack">HTML • CSS • JavaScript</div>
+                                    <h3>Cyberpunk Portfolio</h3>
+                                    <p>High-performance CV built with Vanilla Web Components and Neumorphic design.</p>
+                                    <div class="stack">
+                                        <ui-tag variant="secondary">Vanilla JS</ui-tag>
+                                        <ui-tag variant="secondary">CSS3</ui-tag>
+                                        <ui-tag variant="secondary">MCP</ui-tag>
+                                    </div>
                                 </div>
                             </div>
                         `}

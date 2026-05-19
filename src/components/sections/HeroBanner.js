@@ -32,10 +32,11 @@ export class HeroBanner extends BaseComponent {
                 .stage {
                     position: relative;
                     height: 440px;
-                    border: var(--border-width) solid var(--text);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
+                    border: 1px solid var(--glass-border);
+                    border-radius: var(--radius-lg);
                     background: #000;
                     overflow: hidden;
+                    box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.05);
                 }
 
                 particle-graph {
@@ -44,34 +45,24 @@ export class HeroBanner extends BaseComponent {
                 }
 
                 .content {
-                    margin-top: var(--space-lg);
+                    margin-top: 2rem;
                     display: grid;
-                    gap: var(--space-sm);
+                    gap: 1rem;
                     max-width: 860px;
                 }
 
                 .kicker {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: var(--space-sm);
-                    font-family: monospace;
-                    font-weight: 800;
+                    gap: 0.75rem;
                 }
-
-                .tag {
-                    display: inline-flex;
-                    align-items: center;
-                    border: var(--border-width) solid var(--text);
-                    padding: 0.35rem 0.6rem;
-                    background: var(--surface-2);
-                }
-
-                .tag.primary { background: var(--surface-2); }
 
                 h1 {
-                    font-size: clamp(2.1rem, 4vw, 3.2rem);
+                    font-size: clamp(2.1rem, 5vw, 4rem);
                     line-height: 1.03;
                     margin: 0;
+                    font-weight: 800;
+                    letter-spacing: -0.02em;
                 }
 
                 .typewriter {
@@ -95,26 +86,33 @@ export class HeroBanner extends BaseComponent {
                     50% { border-color: var(--primary); }
                 }
 
-                p { margin: 0; }
+                p { 
+                    margin: 0;
+                    font-size: 1.25rem;
+                    color: var(--text-dim);
+                    max-width: 600px;
+                }
 
                 .ctaRow {
                     display: flex;
-                    gap: var(--space-sm);
-                    margin-top: var(--space-sm);
+                    gap: 1rem;
+                    margin-top: 1rem;
                     flex-wrap: wrap;
                 }
 
 
                 .identity {
-                    margin-top: var(--space-sm);
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.9;
+                    margin-top: 2rem;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    opacity: 0.6;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
                 }
 
                 @media (max-width: 650px) {
-                    .stage { height: 520px; }
-                    .overlay { margin: var(--space-md); }
+                    .stage { height: 320px; }
                 }
             </style>
 
@@ -125,9 +123,9 @@ export class HeroBanner extends BaseComponent {
 
                 <div class="content">
                     <div class="kicker">
-                        <span class="tag primary">${status}</span>
-                        <span class="tag">${role}</span>
-                        <span class="tag">${location}</span>
+                        <ui-tag variant="primary">${status}</ui-tag>
+                        <ui-tag>${role}</ui-tag>
+                        <ui-tag>${location}</ui-tag>
                     </div>
 
                     <h1><span class="typewriter">${headline}</span></h1>
@@ -138,7 +136,7 @@ export class HeroBanner extends BaseComponent {
                         <ui-button href="${secondary.href}">${secondary.label}</ui-button>
                     </div>
 
-                    <div class="identity">${name} • Curriculum Vitae</div>
+                    <div class="identity">${name} // SYSTEM.PROTO</div>
                 </div>
             </section>
         `);

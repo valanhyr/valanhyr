@@ -54,69 +54,57 @@ export class CvSkills extends BaseComponent {
                 .grid {
                     display: grid;
                     grid-template-columns: repeat(2, minmax(0, 1fr));
-                    gap: var(--space-md);
+                    gap: 1.5rem;
                 }
                 .box {
-                    background: var(--surface-2);
-                    border: var(--border-width) solid var(--text);
-                    padding: 1rem;
+                    background: var(--surface);
+                    box-shadow: 4px 4px 8px var(--shadow-dark), 
+                                -4px -4px 8px var(--shadow-light);
+                    border: 1px solid rgba(255,255,255,0.02);
+                    padding: 1.25rem;
+                    border-radius: var(--radius);
                 }
                 .boxTop {
                     display: flex;
                     justify-content: space-between;
                     gap: var(--space-sm);
                     align-items: baseline;
-                    margin-bottom: var(--space-sm);
+                    margin-bottom: 1rem;
                 }
                 h3 {
                     margin: 0;
-                    font-family: monospace;
-                    font-weight: 900;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
                     text-transform: uppercase;
+                    color: var(--secondary);
+                    font-size: 1rem;
                 }
                 .meta {
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.75;
+                    font-family: var(--font-mono);
+                    font-weight: 500;
+                    opacity: 0.5;
+                    font-size: 0.75rem;
                 }
                 .chips {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: 0.4rem;
+                    gap: 0.5rem;
                 }
-                .chip {
-                    border: 2px solid var(--text);
-                    padding: 0.2rem 0.45rem;
-                    font-family: monospace;
-                    font-weight: 800;
-                    background: var(--surface-2);
-                    
-                    /* Animation base */
+                
+                ui-tag {
                     opacity: 0;
-                    transform: scale(0.9);
-                    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+                    transform: translateY(10px);
                 }
 
-                /* Trigger animation when section is revealed */
-                :host(.reveal-visible) .chip {
-                    animation: staggerIn 0.4s var(--ease) forwards;
+                :host(.reveal-visible) ui-tag {
+                    animation: fadeInUp 0.4s var(--ease) forwards;
                 }
 
-                @keyframes staggerIn {
+                @keyframes fadeInUp {
                     to {
                         opacity: 1;
-                        transform: scale(1);
+                        transform: translateY(0);
                     }
-                }
-
-                .chip:hover {
-                    background: var(--primary);
-                    color: var(--on-accent);
-                    box-shadow: 0 0 12px var(--primary);
-                    transform: translateY(-2px) scale(1.05);
-                }
-                @media (max-width: 820px) {
-                    .grid { grid-template-columns: 1fr; }
                 }
             </style>
 
@@ -124,7 +112,7 @@ export class CvSkills extends BaseComponent {
                 <ui-card>
                     <div class="top">
                         <h2>Skills</h2>
-                        <div class="hint">CV / Stack overview</div>
+                        <div class="hint">CV // Stack Overview</div>
                     </div>
 
                     <div class="grid">
@@ -137,14 +125,18 @@ export class CvSkills extends BaseComponent {
                                         <div class="meta">${collectLeaves(val, []).length} items</div>
                                     </div>
                                     <div class="chips">
-                                        ${leaves.map((s, i) => `<span class="chip" style="animation-delay: ${i * 0.05}s">${s}</span>`).join('')}
+                                        ${leaves.map((s, i) => `<ui-tag interactive style="animation-delay: ${i * 0.05}s">${s}</ui-tag>`).join('')}
                                     </div>
                                 </div>
                             `;
                         }).join('') : `
                             <div class="box">
                                 <h3>frontend</h3>
-                                <div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div>
+                                <div class="chips">
+                                    <ui-tag interactive>HTML</ui-tag>
+                                    <ui-tag interactive>CSS</ui-tag>
+                                    <ui-tag interactive>JavaScript</ui-tag>
+                                </div>
                             </div>
                         `}
                     </div>
