@@ -74,6 +74,27 @@ export class HeroBanner extends BaseComponent {
                     margin: 0;
                 }
 
+                .typewriter {
+                    display: inline-block;
+                    overflow: hidden;
+                    border-right: 3px solid var(--primary);
+                    white-space: nowrap;
+                    animation: 
+                        typing 3s steps(40, end),
+                        blink-caret .75s step-end infinite;
+                    max-width: fit-content;
+                }
+
+                @keyframes typing {
+                    from { width: 0 }
+                    to { width: 100% }
+                }
+
+                @keyframes blink-caret {
+                    from, to { border-color: transparent }
+                    50% { border-color: var(--primary); }
+                }
+
                 p { margin: 0; }
 
                 .ctaRow {
@@ -109,7 +130,7 @@ export class HeroBanner extends BaseComponent {
                         <span class="tag">${location}</span>
                     </div>
 
-                    <h1>${headline}</h1>
+                    <h1><span class="typewriter">${headline}</span></h1>
                     <p>${subheadline}</p>
 
                     <div class="ctaRow">

@@ -35,3 +35,16 @@ code {
     padding: 0.2rem 0.4rem;
     border: 2px solid var(--text);
 }
+
+/* Scroll Reveal Animations */
+.reveal-hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    will-change: opacity, transform;
+}
+
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}

@@ -41,15 +41,39 @@
   },
   "experience": [
     {
-      "company": "Example Corp",
-      "role": "Frontend Engineer",
+      "company": "Tech Innovators",
+      "role": "Senior Frontend Developer",
       "period": "2023 — Present",
       "location": "Remote",
-      "stack": ["HTML", "CSS", "JavaScript", "Node.js"],
+      "stack": ["TypeScript", "Angular", "Signals", "SASS"],
       "achievements": [
-        "Improved core flows UX and reduced UI regressions with stronger component boundaries.",
-        "Optimized critical screens, reducing perceived latency and improving responsiveness.",
-        "Partnered with design/product to ship features with a11y and performance baked in."
+        "Led the migration of a legacy monolithic frontend to a modern Signal-based architecture.",
+        "Improved Lighthouse scores across the main application from 60 to 95+.",
+        "Mentored junior developers and established high-quality PR review standards."
+      ]
+    },
+    {
+      "company": "Global Solutions",
+      "role": "Full Stack Developer",
+      "period": "2021 — 2023",
+      "location": "Hybrid / Madrid",
+      "stack": ["Node.js", "Express", "PostgreSQL", "React"],
+      "achievements": [
+        "Designed and implemented a scalable REST API handling over 1M requests per day.",
+        "Reduced database query times by 40% through advanced indexing and query optimization.",
+        "Automated deployment pipelines using Docker and GitHub Actions, reducing ship time by 50%."
+      ]
+    },
+    {
+      "company": "Creative Agency",
+      "role": "Web Developer",
+      "period": "2019 — 2021",
+      "location": "On-site / Barcelona",
+      "stack": ["HTML5", "CSS3", "JavaScript", "PHP"],
+      "achievements": [
+        "Developed pixel-perfect, responsive landing pages for international clients.",
+        "Integrated third-party APIs for payment gateways and CRM systems.",
+        "Optimized website assets and delivery, achieving under 1s load times on mobile."
       ]
     }
   ],

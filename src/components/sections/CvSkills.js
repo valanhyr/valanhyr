@@ -90,10 +90,30 @@ export class CvSkills extends BaseComponent {
                     font-family: monospace;
                     font-weight: 800;
                     background: var(--surface-2);
+                    
+                    /* Animation base */
+                    opacity: 0;
+                    transform: scale(0.9);
+                    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
                 }
+
+                /* Trigger animation when section is revealed */
+                :host(.reveal-visible) .chip {
+                    animation: staggerIn 0.4s var(--ease) forwards;
+                }
+
+                @keyframes staggerIn {
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+
                 .chip:hover {
                     background: var(--primary);
                     color: var(--on-accent);
+                    box-shadow: 0 0 12px var(--primary);
+                    transform: translateY(-2px) scale(1.05);
                 }
                 @media (max-width: 820px) {
                     .grid { grid-template-columns: 1fr; }
@@ -117,7 +137,7 @@ export class CvSkills extends BaseComponent {
                                         <div class="meta">${collectLeaves(val, []).length} items</div>
                                     </div>
                                     <div class="chips">
-                                        ${leaves.map(s => `<span class="chip">${s}</span>`).join('')}
+                                        ${leaves.map((s, i) => `<span class="chip" style="animation-delay: ${i * 0.05}s">${s}</span>`).join('')}
                                     </div>
                                 </div>
                             `;
