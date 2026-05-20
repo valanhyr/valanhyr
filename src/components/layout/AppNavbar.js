@@ -190,20 +190,27 @@ export class AppNavbar extends BaseComponent {
         const theme = stored || (prefersDark ? 'dark' : 'light');
         this._theme = theme;
 
-        if (theme === 'dark') docEl.setAttribute('data-theme', 'dark');
-        else docEl.removeAttribute('data-theme');
+        docEl.setAttribute('data-theme', theme);
     }
 
     #setTheme(theme) {
         const docEl = globalThis.document?.documentElement;
-        if (docEl) {
-            if (theme === 'dark') docEl.setAttribute('data-theme', 'dark');
-            else docEl.removeAttribute('data-theme');
-        }
+        if (!docEl) return;
 
-        globalThis.localStorage?.setItem?.('theme', theme);
-        this._theme = theme;
-        this.#render();
+        // System Reboot Trigger
+        document.body.classList.add('rebooting');
+        
+        globalThis.setTimeout(() => {
+            docEl.setAttribute('data-theme', theme);
+            
+            globalThis.localStorage?.setItem?.('theme', theme);
+            this._theme = theme;
+            this.#render();
+
+            globalThis.setTimeout(() => {
+                document.body.classList.remove('rebooting');
+            }, 200);
+        }, 200);
     }
 
     #render() {
@@ -247,109 +254,135 @@ export class AppNavbar extends BaseComponent {
                 header {
                     position: sticky;
                     top: 0;
-                    z-index: 10;
-                    background: var(--bg);
-                    border-bottom: var(--border-width) solid var(--text);
+                    z-index: 100;
+                    background: var(--glass-bg);
+                    backdrop-filter: blur(var(--glass-blur));
+                    -webkit-backdrop-filter: blur(var(--glass-blur));
+                    border-bottom: 1px solid var(--glass-border);
                 }
 
                 .wrap {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    gap: var(--space-md);
-                    padding: 1rem;
-                    max-width: 1100px;
+                    gap: var(--space-sm);
+                    padding: 0.75rem 1rem;
+                    max-width: 1200px;
                     margin: 0 auto;
                 }
 
                 .brand {
                     display: grid;
-                    gap: 0.15rem;
+                    gap: 0.1rem;
+                    min-width: 0;
+                    flex-shrink: 1;
                 }
 
                 .brand .name {
-                    font-weight: 900;
-                    letter-spacing: 0.04em;
+                    font-family: var(--font-display);
+                    font-size: clamp(1rem, 4vw, 1.4rem);
+                    font-weight: 800;
+                    letter-spacing: -0.02em;
                     text-transform: uppercase;
+                    color: var(--primary);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .brand .role {
-                    font-family: monospace;
+                    font-family: var(--font-mono);
                     font-weight: 700;
-                    opacity: 0.85;
-                    font-size: 0.9rem;
+                    opacity: 0.5;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
                 }
 
                 .actions {
                     display: flex;
                     align-items: center;
                     justify-content: flex-end;
-                    gap: var(--space-sm);
+                    gap: 1.5rem;
                 }
 
                 .desktopNav {
                     display: flex;
-                    gap: 0.5rem;
-                    flex-wrap: wrap;
-                    justify-content: flex-end;
+                    gap: 0.25rem;
+                    align-items: center;
                 }
 
                 a {
                     text-decoration: none;
-                    color: var(--text);
-                    border: var(--border-width) solid var(--text);
-                    padding: 0.35rem 0.6rem;
-                    background: var(--surface-2);
-                    font-weight: 900;
-                    font-family: monospace;
+                    color: var(--text-dim);
+                    padding: 0.5rem 1rem;
+                    border-radius: var(--radius);
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
+                    transition: all var(--dur) var(--ease);
                 }
 
-                a:hover { background: var(--primary); color: var(--on-accent); }
-                a:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+                a:hover {
+                    background: rgba(0, 255, 204, 0.05);
+                    color: var(--primary);
+                }
+
+                a:focus-visible { 
+                    outline: 2px solid var(--primary); 
+                    outline-offset: 4px; 
+                }
 
                 a[data-active="true"] {
-                    background: var(--surface-2);
-                    box-shadow: inset 0 -8px 0 var(--secondary);
-                }
-
-                a[data-active="true"]:hover {
-                    box-shadow: inset 0 -8px 0 var(--primary);
+                    color: var(--primary);
+                    background: rgba(0, 255, 204, 0.1);
+                    box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
                 }
 
                 .themeToggle {
                     display: inline-flex;
                     align-items: center;
-                    gap: 0.4rem;
-                    font-family: monospace;
-                    font-weight: 900;
+                    gap: 0.5rem;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    font-size: 0.8rem;
                     cursor: pointer;
                     user-select: none;
                 }
 
                 .themeToggle input {
                     appearance: none;
-                    width: 46px;
-                    height: 26px;
-                    border: var(--border-width) solid var(--text);
+                    width: 44px;
+                    height: 22px;
+                    border-radius: 20px;
+                    border: 1px solid var(--glass-border);
                     background: var(--surface-2);
-                    box-shadow: 2px 2px 0px var(--text);
                     position: relative;
                     cursor: pointer;
+                    transition: all 0.3s ease;
                 }
 
                 .themeToggle input::after {
                     content: '';
                     position: absolute;
-                    top: 4px;
-                    left: 4px;
-                    width: 12px;
-                    height: 12px;
-                    background: var(--text);
-                    transition: transform 140ms ease;
+                    top: 3px;
+                    left: 3px;
+                    width: 14px;
+                    height: 14px;
+                    border-radius: 50%;
+                    background: var(--text-dim);
+                    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
                 }
 
-                .themeToggle input:checked { background: var(--secondary); }
-                .themeToggle input:checked::after { transform: translateX(20px); }
+                .themeToggle input:checked { 
+                    background: rgba(0, 255, 255, 0.2);
+                    border-color: var(--primary);
+                }
+                .themeToggle input:checked::after { 
+                    transform: translateX(22px); 
+                    background: var(--primary);
+                }
 
                 .themeToggle.compact .toggleText { display: none; }
 
@@ -357,29 +390,30 @@ export class AppNavbar extends BaseComponent {
                     display: none;
                     align-items: center;
                     justify-content: center;
-                    width: 44px;
-                    height: 44px;
-                    border: var(--border-width) solid var(--text);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    border: 1px solid var(--glass-border);
                     background: var(--surface-2);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
-                    font-family: monospace;
-                    font-weight: 900;
+                    color: var(--text);
                     cursor: pointer;
+                    transition: all var(--dur) var(--ease);
                 }
 
-                .menuBtn:active {
-                    transform: translate(-1px, -1px);
-                    box-shadow: calc(var(--shadow-offset) + 1px) calc(var(--shadow-offset) + 1px) 0px var(--text);
+                .menuBtn:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                    border-color: var(--primary);
                 }
 
                 .backdrop {
                     position: fixed;
                     inset: 0;
-                    background: rgba(0,0,0,0.45);
+                    background: rgba(0,0,0,0.6);
+                    backdrop-filter: blur(4px);
                     opacity: 0;
                     pointer-events: none;
-                    transition: opacity 160ms ease;
-                    z-index: 99;
+                    transition: opacity 300ms ease;
+                    z-index: 1000;
                 }
 
                 .backdrop[data-open="true"] {
@@ -392,12 +426,12 @@ export class AppNavbar extends BaseComponent {
                     top: 0;
                     right: 0;
                     height: 100vh;
-                    width: min(86vw, 320px);
-                    background: var(--bg);
-                    border-left: var(--border-width) solid var(--text);
-                    box-shadow: calc(-1 * var(--shadow-offset)) 0 0 var(--text);
-                    transform: translateX(110%);
-                    transition: transform 180ms ease;
+                    width: min(80vw, 300px);
+                    background: var(--glass-bg);
+                    backdrop-filter: blur(var(--glass-blur));
+                    border-left: 1px solid var(--glass-border);
+                    transform: translateX(100%);
+                    transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
                     display: grid;
                     grid-template-rows: auto 1fr;
                 }
@@ -408,55 +442,56 @@ export class AppNavbar extends BaseComponent {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    gap: var(--space-md);
-                    padding: 1rem;
-                    border-bottom: var(--border-width) solid var(--text);
+                    padding: 1.5rem;
+                    border-bottom: 1px solid var(--glass-border);
                 }
 
                 .drawerTitle {
-                    font-family: monospace;
-                    font-weight: 900;
-                    letter-spacing: 0.04em;
+                    font-weight: 800;
                     text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    color: var(--primary);
                 }
 
                 .drawerActions {
                     display: flex;
                     align-items: center;
-                    gap: var(--space-sm);
+                    gap: 1rem;
                 }
 
                 .closeBtn {
-                    width: 44px;
-                    height: 44px;
-                    border: var(--border-width) solid var(--text);
-                    background: var(--surface-2);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
-                    font-family: monospace;
-                    font-weight: 900;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border: 1px solid var(--glass-border);
+                    background: transparent;
+                    color: var(--text);
                     cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
 
                 .mobileNav {
-                    padding: 1rem;
+                    padding: 1.5rem;
                     display: grid;
-                    gap: 0.6rem;
+                    gap: 0.75rem;
                     align-content: start;
                 }
 
                 .mobileNav a {
                     display: block;
-                    padding: 0.75rem 0.75rem;
-                    border-width: var(--border-width);
-                    background: var(--surface-2);
+                    padding: 1rem;
+                    border-radius: 12px;
+                    background: rgba(255, 255, 255, 0.02);
                 }
 
-                .mobileNav a:hover {
-                    background: var(--secondary);
-                    color: var(--on-accent);
+                .mobileNav a[data-active="true"] {
+                    background: rgba(0, 255, 255, 0.1);
+                    border: 1px solid rgba(0, 255, 255, 0.2);
                 }
 
-                @media (max-width: 650px) {
+                @media (max-width: 768px) {
                     .desktopNav { display: none; }
                     .menuBtn { display: inline-flex; }
                 }
@@ -470,13 +505,13 @@ export class AppNavbar extends BaseComponent {
                     </div>
 
                     <div class="actions">
-                        ${themeToggle}
-
-                        <button class="menuBtn" type="button" aria-label="Menu" aria-expanded="${menuOpen ? 'true' : 'false'}" aria-controls="mobileMenu">☰</button>
-
                         <nav class="desktopNav" aria-label="Primary">
                             ${nav.map(item => `<a href="${item.href}">${item.label}</a>`).join('')}
                         </nav>
+                        
+                        ${themeToggle}
+
+                        <button class="menuBtn" type="button" aria-label="Menu" aria-expanded="${menuOpen ? 'true' : 'false'}" aria-controls="mobileMenu">☰</button>
                     </div>
                 </div>
 

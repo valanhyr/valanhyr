@@ -59,7 +59,7 @@ export class CvAbout extends BaseComponent {
                     gap: 0.35rem;
                 }
                 li { font-weight: 700; }
-                @media (max-width: 780px) {
+                @media (max-width: 768px) {
                     .grid { grid-template-columns: 1fr; }
                 }
             </style>

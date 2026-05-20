@@ -15,6 +15,7 @@ export class CvProjects extends BaseComponent {
             <style>
                 :host { display: block; }
                 section { scroll-margin-top: 96px; }
+                
                 .top {
                     display: flex;
                     align-items: baseline;
@@ -23,120 +24,200 @@ export class CvProjects extends BaseComponent {
                     flex-wrap: wrap;
                     margin-bottom: var(--space-md);
                 }
+
                 h2 {
                     margin: 0;
                     font-size: 1.4rem;
                     letter-spacing: 0.02em;
                     text-transform: uppercase;
                 }
+
                 .hint {
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.75;
-                }
-                .grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                    gap: var(--space-md);
-                    align-items: stretch;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    opacity: 0.5;
+                    font-size: 0.8rem;
                 }
 
-                article {
-                    height: 100%;
+                .accordion {
+                    display: flex;
+                    width: 100%;
+                    height: 440px;
+                    gap: 1rem;
+                    margin-top: 1.5rem;
                 }
 
-                ui-card {
-                    height: 100%;
-                }
-
-                h3 { margin: 0; font-family: monospace; font-weight: 900; }
-                p { margin: 0; }
-                ul { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
-                li { font-weight: 700; }
-                .content {
-                    height: 100%;
+                .project-card {
+                    flex: 1;
+                    position: relative;
+                    overflow: hidden;
+                    isolation: isolate;
+                    border: 1px solid var(--glass-border);
+                    background: var(--surface-2);
+                    border-radius: var(--radius);
+                    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
                     display: flex;
                     flex-direction: column;
-                    gap: var(--space-sm);
                 }
 
-                .details {
+                .project-card.active {
+                    flex: 5;
+                    background: var(--surface);
+                    box-shadow: 15px 15px 30px var(--shadow-dark), 
+                                0 0 15px rgba(0, 255, 204, 0.1);
+                    border-color: rgba(0, 255, 204, 0.3);
+                }
+
+                .accordion:hover .project-card {
                     flex: 1;
-                    display: grid;
-                    gap: var(--space-sm);
-                    align-content: start;
+                    box-shadow: none;
+                    border-color: var(--glass-border);
                 }
 
+                .accordion .project-card:hover {
+                    flex: 5;
+                    background: var(--surface);
+                    box-shadow: 15px 15px 30px var(--shadow-dark), 
+                                0 0 15px rgba(0, 255, 204, 0.1);
+                    border-color: rgba(0, 255, 204, 0.3);
+                }
+
+                .card-bg {
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(145deg, var(--surface), var(--surface-3));
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: height 0.6s var(--ease);
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .accordion:not(:hover) .project-card.active .card-bg,
+                .project-card:hover .card-bg {
+                    height: 30%;
+                    border-bottom: 1px solid var(--glass-border);
+                }
+
+                .accordion:not(:hover) .project-card.active .card-bg::after,
+                .project-card:hover .card-bg::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(to bottom, transparent, rgba(0, 255, 255, 0.05));
+                }
+
+                .card-label {
+                    position: absolute;
+                    bottom: 1.5rem;
+                    left: 1.5rem;
+                    font-family: var(--font-mono);
+                    font-weight: 800;
+                    background: var(--primary);
+                    color: var(--on-accent);
+                    padding: 4px 12px;
+                    border-radius: 4px;
+                    transition: all 0.5s var(--ease);
+                    z-index: 20;
+                    white-space: nowrap;
+                    font-size: 0.65rem;
+                    box-shadow: 0 0 15px var(--primary);
+                    pointer-events: none;
+                }
+
+                .accordion:not(:hover) .project-card.active .card-label,
+                .project-card:hover .card-label {
+                    bottom: auto;
+                    top: 1.25rem;
+                    left: 1.25rem;
+                    transform: scale(1.1);
+                }
+
+                .card-content {
+                    padding: 1.5rem;
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: all 0.4s var(--ease);
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                    overflow: hidden;
+                    pointer-events: none;
+                }
+
+                .accordion:not(:hover) .project-card.active .card-content,
+                .project-card:hover .card-content {
+                    opacity: 1;
+                    transform: translateY(0);
+                    pointer-events: auto;
+                }
+
+                h3 { margin: 0; font-weight: 800; font-size: 1.4rem; color: var(--text); }
+                p { margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--text-dim); }
+                
                 .stack {
                     margin-top: auto;
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.85;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.4rem;
                 }
 
-                .links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-
-                a {
-                    text-decoration: none;
-                    color: var(--text);
-                    border: var(--border-width) solid var(--text);
-                    padding: 0.25rem 0.5rem;
-                    background: var(--surface-2);
-                    font-family: monospace;
-                    font-weight: 900;
+                .links { 
+                    display: flex; 
+                    gap: 0.75rem; 
+                    margin-top: 1rem; 
                 }
 
-                a:hover {
-                    background: var(--secondary);
-                    color: var(--on-accent);
+                @media (max-width: 768px) {
+                    .accordion { flex-direction: column; height: auto; }
+                    .project-card { height: 100px; flex: none !important; }
+                    .accordion:not(:hover) .project-card.active, .project-card:hover { height: 320px; }
+                    .card-label { transform: none !important; bottom: auto; top: 1rem; right: 1rem; left: auto; }
                 }
-                @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } }
             </style>
 
             <section id="projects" aria-label="Projects">
                 <ui-card>
                     <div class="top">
                         <h2>Projects</h2>
-                        <div class="hint">CV / Selected work</div>
+                        <div class="hint">CV // System Portfolio</div>
                     </div>
 
-                    <div class="grid">
-                        ${items.length ? items.map(p => `
-                            <article>
-                                <ui-card surface="2" interactive>
-                                    <div slot="header">
-                                        <h3>${p.name ?? 'Project'}</h3>
-                                    </div>
-
-                                    <div class="content">
-                                        <div class="details">
-                                            <p>${p.description ?? 'Short description: problem, solution, and what you owned.'}</p>
-                                            ${Array.isArray(p.highlights) && p.highlights.length ? `
-                                                <ul>
-                                                    ${p.highlights.slice(0, 3).map(h => `<li>${h}</li>`).join('')}
-                                                </ul>
-                                            ` : ''}
+                    <div class="accordion">
+                        ${items.length ? items.map((p, index) => `
+                            <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
+                                <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
+                                <div class="card-bg"></div>
+                                <div class="card-content">
+                                    <h3>${p.name ?? 'Project'}</h3>
+                                    <p>${p.description ?? ''}</p>
+                                    ${Array.isArray(p.stack) && p.stack.length ? `
+                                        <div class="stack">
+                                            ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
                                         </div>
-
-                                        ${Array.isArray(p.stack) && p.stack.length ? `<div class="stack">${p.stack.join(' • ')}</div>` : ''}
+                                    ` : ''}
+                                    <div class="links">
+                                        ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
                                     </div>
-
-                                    <div slot="footer" class="links">
-                                        ${(Array.isArray(p.links) ? p.links : []).slice(0, 2).map(l => `<a href="${l.href}">${l.label}</a>`).join('')}
-                                    </div>
-                                </ui-card>
-                            </article>
+                                </div>
+                            </div>
                         `).join('') : `
-                            <article>
-                                <ui-card surface="2">
-                                    <div slot="header"><h3>No projects yet</h3></div>
-                                    <div class="content">
-                                        <div class="details">
-                                            <p>Add 2–3 selected projects in <code>src/store/cv.json</code>.</p>
-                                        </div>
+                            <div class="project-card active">
+                                <div class="card-label">PROTO.SITE</div>
+                                <div class="card-bg"></div>
+                                <div class="card-content">
+                                    <h3>Cyberpunk Portfolio</h3>
+                                    <p>High-performance CV built with Vanilla Web Components and Neumorphic design.</p>
+                                    <div class="stack">
+                                        <ui-tag variant="secondary">Vanilla JS</ui-tag>
+                                        <ui-tag variant="secondary">CSS3</ui-tag>
+                                        <ui-tag variant="secondary">MCP</ui-tag>
                                     </div>
-                                </ui-card>
-                            </article>
+                                </div>
+                            </div>
                         `}
                     </div>
                 </ui-card>

@@ -33,10 +33,12 @@ export class HeroBanner extends BaseComponent {
                 .stage {
                     position: relative;
                     height: 440px;
-                    border: var(--border-width) solid var(--text);
-                    box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--text);
-                    background: #000;
+                    border: 1px solid var(--glass-border);
+                    border-radius: var(--radius-lg);
+                    background: var(--bg);
                     overflow: hidden;
+                    box-shadow: inset 0 0 50px rgba(0, 255, 204, 0.05),
+                                0 10px 30px var(--shadow-dark);
                 }
 
                 particle-graph {
@@ -45,59 +47,91 @@ export class HeroBanner extends BaseComponent {
                 }
 
                 .content {
-                    margin-top: var(--space-lg);
+                    margin-top: 3rem;
                     display: grid;
-                    gap: var(--space-sm);
-                    max-width: 860px;
+                    gap: 1.5rem;
+                    max-width: 920px;
                 }
 
                 .kicker {
                     display: flex;
                     flex-wrap: wrap;
-                    gap: var(--space-sm);
-                    font-family: monospace;
-                    font-weight: 800;
+                    gap: 0.75rem;
                 }
-
-                .tag {
-                    display: inline-flex;
-                    align-items: center;
-                    border: var(--border-width) solid var(--text);
-                    padding: 0.35rem 0.6rem;
-                    background: var(--surface-2);
-                }
-
-                .tag.primary { background: var(--surface-2); }
 
                 h1 {
-                    font-size: clamp(2.1rem, 4vw, 3.2rem);
-                    line-height: 1.03;
+                    font-family: var(--font-display);
+                    font-size: clamp(2.5rem, 8vw, 5.5rem);
+                    line-height: 0.95;
                     margin: 0;
+                    font-weight: 800;
+                    letter-spacing: -0.04em;
+                    color: var(--text);
+                    text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
                 }
 
-                p { margin: 0; }
+                .typewriter {
+                    display: inline-block;
+                    overflow: hidden;
+                    border-right: 4px solid var(--primary);
+                    white-space: nowrap;
+                    animation: 
+                        typing 3s steps(40, end),
+                        blink-caret .75s step-end infinite;
+                    max-width: fit-content;
+                    padding-right: 0.1em;
+                }
+
+                @keyframes typing {
+                    from { width: 0 }
+                    to { width: 100% }
+                }
+
+                @keyframes blink-caret {
+                    from, to { border-color: transparent }
+                    50% { border-color: var(--primary); }
+                }
+
+                p { 
+                    margin: 0;
+                    font-size: 1.25rem;
+                    color: var(--text-dim);
+                    max-width: 600px;
+                }
 
                 .proofs { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.35rem; }
                 .proofs li { font-weight: 800; }
 
                 .ctaRow {
                     display: flex;
-                    gap: var(--space-sm);
-                    margin-top: var(--space-sm);
+                    gap: 1rem;
+                    margin-top: 1rem;
                     flex-wrap: wrap;
                 }
 
 
                 .identity {
-                    margin-top: var(--space-sm);
-                    font-family: monospace;
-                    font-weight: 800;
-                    opacity: 0.9;
+                    margin-top: 2rem;
+                    font-family: var(--font-mono);
+                    font-weight: 700;
+                    opacity: 0.6;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
                 }
 
-                @media (max-width: 650px) {
-                    .stage { height: 520px; }
-                    .overlay { margin: var(--space-md); }
+                @media (max-width: 768px) {
+                    .stage { height: 340px; }
+                    h1 { font-size: clamp(2rem, 10vw, 3.5rem); }
+                    .content { margin-top: 2rem; }
+                    .typewriter { 
+                        white-space: normal; 
+                        border-right: none;
+                        animation: none;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .stage { height: 280px; }
                 }
             </style>
 
@@ -108,12 +142,12 @@ export class HeroBanner extends BaseComponent {
 
                 <div class="content">
                     <div class="kicker">
-                        <span class="tag primary">${status}</span>
-                        <span class="tag">${role}</span>
-                        <span class="tag">${location}</span>
+                        <ui-tag variant="primary">${status}</ui-tag>
+                        <ui-tag>${role}</ui-tag>
+                        <ui-tag>${location}</ui-tag>
                     </div>
 
-                    <h1>${headline}</h1>
+                    <h1><span class="typewriter">${headline}</span></h1>
                     <p>${subheadline}</p>
                     ${proofs.length ? `
   <ul class="proofs">
@@ -126,7 +160,7 @@ export class HeroBanner extends BaseComponent {
                         <ui-button href="${secondary.href}">${secondary.label}</ui-button>
                     </div>
 
-                    <div class="identity">${name} • Curriculum Vitae</div>
+                    <div class="identity">${name} // SYSTEM.PROTO</div>
                 </div>
             </section>
         `);

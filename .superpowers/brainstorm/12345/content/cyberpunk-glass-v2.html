@@ -1,0 +1,46 @@
+<h2>Diseño: Neumorfismo Cyberpunk + Glassmorphism</h2>
+<p class="subtitle">Estructura táctil con transparencias difuminadas y acentos de neón</p>
+
+<div class="mockup">
+  <div class="mockup-header">Previsualización de Componentes</div>
+  <div class="mockup-body" style="background: #0d0d0d; padding: 40px; border-radius: 0 0 12px 12px; display: flex; flex-direction: column; gap: 30px; overflow: hidden;">
+    
+    <!-- Tarjeta Neumórfica -->
+    <div style="background: #0d0d0d; padding: 25px; border-radius: 20px; box-shadow: 10px 10px 20px #050505, -10px -10px 20px #151515; color: #fff; border: 1px solid rgba(255,255,255,0.02);">
+      <h3 style="margin: 0; color: #0ff; text-shadow: 0 0 10px rgba(0,255,255,0.5);">Tarjeta de Perfil</h3>
+      <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 10px; color: #ccc;">Este componente usa sombras duales para simular volumen físico sobre una superficie oscura.</p>
+    </div>
+
+    <!-- Panel Glassmorphism -->
+    <div style="position: relative; height: 150px; background: linear-gradient(135deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1)); border-radius: 20px; display: flex; align-items: center; justify-content: center; z-index: 1;">
+      <div style="width: 80%; padding: 20px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); text-align: center;">
+        <h4 style="color: #fff; margin: 0; letter-spacing: 1px;">Efecto Cristal (Glass)</h4>
+        <p style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 5px;">Ideal para modales, sidebars o elementos flotantes.</p>
+      </div>
+      <!-- Decoración de fondo para ver el blur -->
+      <div style="position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; background: #f0f; border-radius: 50%; z-index: -1; filter: blur(10px);"></div>
+      <div style="position: absolute; bottom: 10px; right: 10px; width: 60px; height: 60px; background: #0ff; border-radius: 50%; z-index: -1; filter: blur(15px);"></div>
+    </div>
+
+    <!-- Botones y Estados -->
+    <div style="display: flex; gap: 20px;">
+      <button style="background: #0d0d0d; color: #0ff; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; box-shadow: 5px 5px 10px #050505, -5px -5px 10px #151515; transition: all 0.2s;">
+        BOTÓN NORMAL
+      </button>
+      <button style="background: #0d0d0d; color: #f0f; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; box-shadow: inset 4px 4px 8px #050505, inset -4px -4px 8px #151515; text-shadow: 0 0 5px rgba(255,0,255,0.5);">
+        BOTÓN PRESIONADO
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Propuesta Técnica Detallada</h3>
+  <ul>
+    <li><strong>Atmósfera:</strong> Profundidad absoluta mediante el uso de sombras suaves en superficies oscuras (Neumorfismo oscuro).</li>
+    <li><strong>Capas de Cristal:</strong> Elementos secundarios (como el fondo del Navbar o modales) usarán el efecto <code>backdrop-filter: blur()</code> para un toque moderno.</li>
+    <li><strong>Acentos Reactivos:</strong> Neones en Cyan y Magenta que se iluminan al interactuar, contrastando con la base mate.</li>
+    <li><strong>Habilidades Vanilla:</strong> Todo el efecto de "volumen" y "cristal" se logrará mediante CSS puro (sombras, gradientes y filtros), demostrando que no se necesita Tailwind ni librerías externas para un acabado de alta gama.</li>
+  </ul>
+  <p>¿Te gusta esta combinación? Si es así, prepararé el documento de diseño final para empezar la implementación.</p>
+</div>
