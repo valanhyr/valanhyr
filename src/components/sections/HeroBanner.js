@@ -34,9 +34,10 @@ export class HeroBanner extends BaseComponent {
                     height: 440px;
                     border: 1px solid var(--glass-border);
                     border-radius: var(--radius-lg);
-                    background: #000;
+                    background: var(--bg);
                     overflow: hidden;
-                    box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.05);
+                    box-shadow: inset 0 0 50px rgba(0, 255, 204, 0.05),
+                                0 10px 30px var(--shadow-dark);
                 }
 
                 particle-graph {
@@ -45,10 +46,10 @@ export class HeroBanner extends BaseComponent {
                 }
 
                 .content {
-                    margin-top: 2rem;
+                    margin-top: 3rem;
                     display: grid;
-                    gap: 1rem;
-                    max-width: 860px;
+                    gap: 1.5rem;
+                    max-width: 920px;
                 }
 
                 .kicker {
@@ -58,22 +59,26 @@ export class HeroBanner extends BaseComponent {
                 }
 
                 h1 {
-                    font-size: clamp(2.1rem, 5vw, 4rem);
-                    line-height: 1.03;
+                    font-family: var(--font-display);
+                    font-size: clamp(2.5rem, 8vw, 5.5rem);
+                    line-height: 0.95;
                     margin: 0;
                     font-weight: 800;
-                    letter-spacing: -0.02em;
+                    letter-spacing: -0.04em;
+                    color: var(--text);
+                    text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
                 }
 
                 .typewriter {
                     display: inline-block;
                     overflow: hidden;
-                    border-right: 3px solid var(--primary);
+                    border-right: 4px solid var(--primary);
                     white-space: nowrap;
                     animation: 
                         typing 3s steps(40, end),
                         blink-caret .75s step-end infinite;
                     max-width: fit-content;
+                    padding-right: 0.1em;
                 }
 
                 @keyframes typing {
@@ -111,8 +116,18 @@ export class HeroBanner extends BaseComponent {
                     letter-spacing: 0.1em;
                 }
 
-                @media (max-width: 650px) {
-                    .stage { height: 320px; }
+                @media (max-width: 768px) {
+                    .stage { height: 340px; }
+                    h1 { font-size: clamp(2rem, 10vw, 3.5rem); }
+                    .content { margin-top: 2rem; }
+                    .typewriter { 
+                        white-space: normal; 
+                        border-right: none;
+                        animation: none;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .stage { height: 280px; }
                 }
             </style>
 

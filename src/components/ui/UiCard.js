@@ -41,12 +41,17 @@ export class UiCard extends BaseComponent {
 
                 .card {
                     height: 100%;
+                    width: 100%;
+                    max-width: 100%;
                     display: flex;
                     flex-direction: column;
+                    position: relative;
+                    box-sizing: border-box;
+                    overflow: hidden;
 
-                    background: var(--surface);
-                    box-shadow: 6px 6px 12px var(--shadow-dark), 
-                                -6px -6px 12px var(--shadow-light);
+                    background: linear-gradient(145deg, var(--surface), var(--surface-3));
+                    box-shadow: 12px 12px 24px var(--shadow-dark), 
+                                -8px -8px 16px var(--shadow-light);
                     border: 1px solid rgba(255,255,255,0.02);
                     padding: 1.5rem;
                     border-radius: var(--radius);
@@ -54,31 +59,31 @@ export class UiCard extends BaseComponent {
                     transition: all var(--dur) var(--ease);
                 }
 
-                :host([surface="2"]) .card {
-                    background: var(--surface-2);
+                /* Corner Brackets */
+                .card::before, .card::after {
+                    content: "";
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid transparent;
+                    pointer-events: none;
+                    transition: border-color var(--dur) var(--ease);
                 }
 
-                .header {
-                    margin-bottom: 1rem;
+                .card::before {
+                    top: -1px;
+                    left: -1px;
+                    border-top-color: rgba(255,255,255,0.05);
+                    border-left-color: rgba(255,255,255,0.05);
+                    border-top-left-radius: var(--radius);
                 }
 
-                .body {
-                    flex: 1;
-                    min-height: 0;
-                }
-
-                .footer {
-                    margin-top: 1rem;
-                }
-
-                :host(:not([data-has-header])) .header {
-                    display: none;
-                    margin-bottom: 0;
-                }
-
-                :host(:not([data-has-footer])) .footer {
-                    display: none;
-                    margin-top: 0;
+                .card::after {
+                    bottom: -1px;
+                    right: -1px;
+                    border-bottom-color: rgba(255,255,255,0.05);
+                    border-right-color: rgba(255,255,255,0.05);
+                    border-bottom-right-radius: var(--radius);
                 }
 
                 :host([interactive]) .card {
@@ -86,10 +91,20 @@ export class UiCard extends BaseComponent {
                 }
 
                 :host([interactive]) .card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 10px 10px 20px var(--shadow-dark), 
-                                -10px -10px 20px var(--shadow-light);
-                    border-color: rgba(255, 255, 255, 0.05);
+                    transform: translateY(-6px);
+                    box-shadow: 20px 20px 40px var(--shadow-dark), 
+                                0 0 15px rgba(0, 255, 204, 0.1);
+                    border-color: rgba(0, 255, 204, 0.2);
+                }
+
+                :host([interactive]) .card:hover::before {
+                    border-top-color: var(--primary);
+                    border-left-color: var(--primary);
+                }
+
+                :host([interactive]) .card:hover::after {
+                    border-bottom-color: var(--primary);
+                    border-right-color: var(--primary);
                 }
             </style>
             <div class="card">

@@ -28,30 +28,39 @@ export class UiTag extends BaseComponent {
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 0.35rem 0.75rem;
-                    border-radius: 50px;
+                    padding: 0.4rem 1rem;
                     font-family: var(--font-mono);
-                    font-size: 0.75rem;
-                    font-weight: 700;
+                    font-size: 0.7rem;
+                    font-weight: 800;
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
+                    letter-spacing: 0.1em;
                     border: 1px solid var(--glass-border);
                     background: var(--surface-2);
                     color: var(--text-dim);
                     white-space: nowrap;
                     transition: all var(--dur) var(--ease);
+
+                    /* Cyber-Chip Shape */
+                    clip-path: polygon(
+                        0% 0%, 
+                        calc(100% - 8px) 0%, 
+                        100% 8px, 
+                        100% 100%, 
+                        8px 100%, 
+                        0% calc(100% - 8px)
+                    );
                 }
 
                 .tag.primary {
                     border-color: var(--primary);
                     color: var(--primary);
-                    background: rgba(0, 255, 255, 0.05);
+                    background: rgba(0, 255, 204, 0.1);
                 }
 
                 .tag.secondary {
                     border-color: var(--secondary);
                     color: var(--secondary);
-                    background: rgba(255, 0, 255, 0.05);
+                    background: rgba(255, 0, 85, 0.1);
                 }
 
                 ${interactive ? `
@@ -61,9 +70,9 @@ export class UiTag extends BaseComponent {
                 .tag:hover {
                     border-color: var(--primary);
                     color: var(--text);
-                    background: rgba(0, 255, 255, 0.15);
-                    box-shadow: 0 0 10px var(--primary);
-                    transform: translateY(-1px);
+                    background: rgba(0, 255, 204, 0.25);
+                    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+                    transform: translateY(-2px);
                 }
                 ` : ''}
             </style>

@@ -190,20 +190,27 @@ export class AppNavbar extends BaseComponent {
         const theme = stored || (prefersDark ? 'dark' : 'light');
         this._theme = theme;
 
-        if (theme === 'dark') docEl.setAttribute('data-theme', 'dark');
-        else docEl.removeAttribute('data-theme');
+        docEl.setAttribute('data-theme', theme);
     }
 
     #setTheme(theme) {
         const docEl = globalThis.document?.documentElement;
-        if (docEl) {
-            if (theme === 'dark') docEl.setAttribute('data-theme', 'dark');
-            else docEl.removeAttribute('data-theme');
-        }
+        if (!docEl) return;
 
-        globalThis.localStorage?.setItem?.('theme', theme);
-        this._theme = theme;
-        this.#render();
+        // System Reboot Trigger
+        document.body.classList.add('rebooting');
+        
+        globalThis.setTimeout(() => {
+            docEl.setAttribute('data-theme', theme);
+            
+            globalThis.localStorage?.setItem?.('theme', theme);
+            this._theme = theme;
+            this.#render();
+
+            globalThis.setTimeout(() => {
+                document.body.classList.remove('rebooting');
+            }, 200);
+        }, 200);
     }
 
     #render() {
@@ -258,8 +265,8 @@ export class AppNavbar extends BaseComponent {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    gap: var(--space-md);
-                    padding: 0.75rem 1.5rem;
+                    gap: var(--space-sm);
+                    padding: 0.75rem 1rem;
                     max-width: 1200px;
                     margin: 0 auto;
                 }
@@ -267,20 +274,29 @@ export class AppNavbar extends BaseComponent {
                 .brand {
                     display: grid;
                     gap: 0.1rem;
+                    min-width: 0;
+                    flex-shrink: 1;
                 }
 
                 .brand .name {
+                    font-family: var(--font-display);
+                    font-size: clamp(1rem, 4vw, 1.4rem);
                     font-weight: 800;
-                    letter-spacing: 0.05em;
+                    letter-spacing: -0.02em;
                     text-transform: uppercase;
                     color: var(--primary);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .brand .role {
                     font-family: var(--font-mono);
-                    font-weight: 500;
-                    opacity: 0.7;
-                    font-size: 0.8rem;
+                    font-weight: 700;
+                    opacity: 0.5;
+                    font-size: 0.7rem;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
                 }
 
                 .actions {
@@ -292,22 +308,24 @@ export class AppNavbar extends BaseComponent {
 
                 .desktopNav {
                     display: flex;
-                    gap: 0.5rem;
+                    gap: 0.25rem;
                     align-items: center;
                 }
 
                 a {
                     text-decoration: none;
-                    color: var(--text);
+                    color: var(--text-dim);
                     padding: 0.5rem 1rem;
-                    border-radius: 50px;
+                    border-radius: var(--radius);
+                    font-family: var(--font-mono);
                     font-weight: 700;
-                    font-size: 0.9rem;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
                     transition: all var(--dur) var(--ease);
                 }
 
                 a:hover {
-                    background: rgba(255, 255, 255, 0.05);
+                    background: rgba(0, 255, 204, 0.05);
                     color: var(--primary);
                 }
 
@@ -318,7 +336,8 @@ export class AppNavbar extends BaseComponent {
 
                 a[data-active="true"] {
                     color: var(--primary);
-                    background: rgba(0, 255, 255, 0.1);
+                    background: rgba(0, 255, 204, 0.1);
+                    box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
                 }
 
                 .themeToggle {

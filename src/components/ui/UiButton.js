@@ -43,14 +43,17 @@ export class UiButton extends BaseComponent {
                     text-decoration: none;
                     color: var(--text);
                     font-weight: 700;
-                    font-family: var(--font-main);
+                    font-family: var(--font-mono);
+                    font-size: 0.9rem;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
 
                     border: 1px solid var(--glass-border);
-                    background: linear-gradient(145deg, #111, #080808);
-                    padding: 12px 24px;
-                    border-radius: 50px;
-                    box-shadow: 6px 6px 12px var(--shadow-dark), 
-                                -6px -6px 12px var(--shadow-light);
+                    background: linear-gradient(145deg, var(--surface), var(--surface-3));
+                    padding: 14px 28px;
+                    border-radius: var(--radius);
+                    box-shadow: 8px 8px 16px var(--shadow-dark), 
+                                -4px -4px 12px var(--shadow-light);
 
                     cursor: pointer;
                     user-select: none;
@@ -67,26 +70,35 @@ export class UiButton extends BaseComponent {
                     background: linear-gradient(
                         90deg,
                         transparent,
-                        rgba(255, 255, 255, 0.1),
+                        rgba(0, 255, 204, 0.15),
                         transparent
                     );
                     transform: translateX(-100%);
-                    animation: sweep 4s infinite linear;
+                    animation: sweep 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
                     pointer-events: none;
+                }
+
+                @keyframes glitch-button {
+                    0% { transform: translate(0); }
+                    20% { transform: translate(-2px, 1px); }
+                    40% { transform: translate(-2px, -1px); }
+                    60% { transform: translate(2px, 1px); }
+                    80% { transform: translate(2px, -1px); }
+                    100% { transform: translate(0); }
                 }
 
                 .btn:hover {
                     border-color: var(--primary);
-                    box-shadow: 0 0 15px var(--primary),
-                                4px 4px 8px var(--shadow-dark), 
-                                -4px -4px 8px var(--shadow-light);
+                    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2),
+                                4px 4px 8px var(--shadow-dark);
                     transform: translateY(-2px);
+                    animation: glitch-button 0.2s infinite linear alternate-reverse;
                 }
 
                 .btn:active {
                     transform: translateY(0);
-                    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
-                                inset -4px -4px 8px var(--shadow-light);
+                    animation: none;
+                    box-shadow: inset 4px 4px 8px var(--shadow-dark);
                 }
 
                 .btn:focus-visible {

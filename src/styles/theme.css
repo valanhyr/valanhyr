@@ -1,35 +1,56 @@
 :root {
-    --bg: #0d0d0d;
-    --surface: #0d0d0d;
-    --surface-2: #141418;
+    --bg: #08080c;
+    --surface: #0d0d10;
+    --surface-2: #14141a;
+    --surface-3: #050507;
 
-    /* Cyberpunk Neons */
-    --primary: #00ffff; /* Cyan */
-    --secondary: #ff00ff; /* Magenta */
-    --accent: #00ffff;
+    /* Cyber-Organic Palette (Dark) */
+    --primary: #00ffcc; /* Neon Mint */
+    --secondary: #ff0055; /* Electric Rose */
+    --accent: #7a00ff; /* Vivid Violet */
 
-    --text: #f5f5f5;
-    --text-dim: rgba(245, 245, 245, 0.7);
+    --text: #f0f0f5;
+    --text-dim: rgba(240, 240, 245, 0.6);
     --on-accent: #000000;
 
-    /* Neumorphic Shadows */
-    --shadow-dark: #050505;
-    --shadow-light: #1a1a1a;
+    /* Refined Neumorphic Shadows (Dark) */
+    --shadow-dark: rgba(0, 0, 0, 0.8);
+    --shadow-light: rgba(255, 255, 255, 0.03);
     
-    /* Glassmorphism */
-    --glass-bg: rgba(13, 13, 13, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.15);
-    --glass-blur: 15px;
+    /* Glassmorphism (Dark) */
+    --glass-bg: rgba(8, 8, 12, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 20px;
 
-    /* Refined Layout */
+    /* Shared Props */
     --border-width: 1px;
-    --radius: 12px;
-    --radius-lg: 20px;
+    --radius: 16px;
+    --radius-lg: 32px;
+    --dur: 400ms;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+    --font-main: 'Hanken Grotesk', system-ui, sans-serif;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
 
-    /* Motion */
-    --dur: 300ms;
-    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+/* --- High-Contrast Cleanroom (Light Mode) --- */
+[data-theme="light"] {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface-2: #ebebef;
+    --surface-3: #e0e0e5;
 
-    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono: 'Fira Code', 'Courier New', monospace;
+    --primary: #00a388;
+    --secondary: #d10047;
+    --accent: #5e00d1;
+
+    --text: #08080c;
+    --text-dim: rgba(8, 8, 12, 0.6);
+    --on-accent: #ffffff;
+
+    --shadow-dark: rgba(0, 0, 0, 0.08);
+    --shadow-light: rgba(255, 255, 255, 1);
+
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.05);
 }

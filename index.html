@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyberpunk Portfolio // SYSTEM.PROTO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Syne:wght@400..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="src/styles/theme.css">
     <link rel="stylesheet" href="src/styles/global.css">
 </head>
-<body data-theme="dark">
+<body>
+    <!-- SVG Noise Filter for Global Grain -->
+    <svg style="display: none;">
+        <filter id="grainy">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" stitchTiles="stitch" />
+            <feColorMatrix type="saturate" values="0" />
+        </filter>
+    </svg>
     <div id="app"></div>
     <script type="module" src="main.js"></script>
 </body>

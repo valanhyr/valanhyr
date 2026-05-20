@@ -18,6 +18,12 @@ export class HomeView extends BaseComponent {
                     padding-bottom: var(--space-xl);
                 }
 
+                @media (max-width: 768px) {
+                    main {
+                        gap: var(--space-lg);
+                    }
+                }
+
                 /* Anchor targets must be in the light DOM (not inside Shadow DOM). */
                 cv-about,
                 cv-skills,

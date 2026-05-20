@@ -78,6 +78,26 @@ export class CvExperience extends BaseComponent {
                     padding-left: 3rem;
                 }
 
+                @media (max-width: 600px) {
+                    .timeline {
+                        padding-left: 1.5rem;
+                        gap: 1.5rem;
+                    }
+                    .item {
+                        padding: 1rem;
+                    }
+                    .row {
+                        flex-direction: column;
+                        gap: 0.5rem;
+                    }
+                    .node {
+                        left: -0.75rem;
+                    }
+                    .timeline::before, .progress-line {
+                        left: 0.75rem;
+                    }
+                }
+
                 .timeline::before {
                     content: "";
                     position: absolute;
@@ -119,7 +139,7 @@ export class CvExperience extends BaseComponent {
                     background: var(--surface);
                     box-shadow: 4px 4px 8px var(--shadow-dark), 
                                 -4px -4px 8px var(--shadow-light);
-                    border: 1px solid rgba(255,255,255,0.02);
+                    border: 1px solid var(--glass-border);
                     padding: 1.5rem;
                     border-radius: var(--radius);
                     transition: all var(--dur) var(--ease);

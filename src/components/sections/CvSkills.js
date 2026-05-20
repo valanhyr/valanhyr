@@ -56,6 +56,12 @@ export class CvSkills extends BaseComponent {
                     grid-template-columns: repeat(2, minmax(0, 1fr));
                     gap: 1.5rem;
                 }
+                
+                @media (max-width: 768px) {
+                    .grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
                 .box {
                     background: var(--surface);
                     box-shadow: 4px 4px 8px var(--shadow-dark), 

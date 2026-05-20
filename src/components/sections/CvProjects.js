@@ -51,6 +51,7 @@ export class CvProjects extends BaseComponent {
                     flex: 1;
                     position: relative;
                     overflow: hidden;
+                    isolation: isolate;
                     border: 1px solid var(--glass-border);
                     background: var(--surface-2);
                     border-radius: var(--radius);
@@ -63,38 +64,40 @@ export class CvProjects extends BaseComponent {
                 .project-card.active {
                     flex: 5;
                     background: var(--surface);
-                    box-shadow: 10px 10px 20px var(--shadow-dark), 
-                                -10px -10px 20px var(--shadow-light);
-                    border-color: rgba(255, 255, 255, 0.05);
+                    box-shadow: 15px 15px 30px var(--shadow-dark), 
+                                0 0 15px rgba(0, 255, 204, 0.1);
+                    border-color: rgba(0, 255, 204, 0.3);
                 }
 
                 .accordion:hover .project-card {
                     flex: 1;
                     box-shadow: none;
+                    border-color: var(--glass-border);
                 }
 
                 .accordion .project-card:hover {
                     flex: 5;
                     background: var(--surface);
-                    box-shadow: 10px 10px 20px var(--shadow-dark), 
-                                -10px -10px 20px var(--shadow-light);
-                    border-color: rgba(255, 255, 255, 0.05);
+                    box-shadow: 15px 15px 30px var(--shadow-dark), 
+                                0 0 15px rgba(0, 255, 204, 0.1);
+                    border-color: rgba(0, 255, 204, 0.3);
                 }
 
                 .card-bg {
                     width: 100%;
                     height: 100%;
-                    background: linear-gradient(45deg, #111, #080808);
+                    background: linear-gradient(145deg, var(--surface), var(--surface-3));
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     transition: height 0.6s var(--ease);
                     position: relative;
+                    z-index: 1;
                 }
 
                 .accordion:not(:hover) .project-card.active .card-bg,
                 .project-card:hover .card-bg {
-                    height: 35%;
+                    height: 30%;
                     border-bottom: 1px solid var(--glass-border);
                 }
 
@@ -111,21 +114,25 @@ export class CvProjects extends BaseComponent {
                     bottom: 1.5rem;
                     left: 1.5rem;
                     font-family: var(--font-mono);
-                    font-weight: 700;
+                    font-weight: 800;
                     background: var(--primary);
                     color: var(--on-accent);
-                    padding: 0.25rem 0.75rem;
+                    padding: 4px 12px;
                     border-radius: 4px;
-                    transition: all 0.4s var(--ease);
-                    z-index: 10;
+                    transition: all 0.5s var(--ease);
+                    z-index: 20;
                     white-space: nowrap;
-                    font-size: 0.7rem;
-                    box-shadow: 0 0 10px var(--primary);
+                    font-size: 0.65rem;
+                    box-shadow: 0 0 15px var(--primary);
+                    pointer-events: none;
                 }
 
                 .accordion:not(:hover) .project-card.active .card-label,
                 .project-card:hover .card-label {
-                    transform: scale(1.1) translateY(-100px);
+                    bottom: auto;
+                    top: 1.25rem;
+                    left: 1.25rem;
+                    transform: scale(1.1);
                 }
 
                 .card-content {
@@ -182,9 +189,8 @@ export class CvProjects extends BaseComponent {
                     <div class="accordion">
                         ${items.length ? items.map((p, index) => `
                             <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
-                                <div class="card-bg">
-                                    <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
-                                </div>
+                                <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
+                                <div class="card-bg"></div>
                                 <div class="card-content">
                                     <h3>${p.name ?? 'Project'}</h3>
                                     <p>${p.description ?? ''}</p>
@@ -200,9 +206,8 @@ export class CvProjects extends BaseComponent {
                             </div>
                         `).join('') : `
                             <div class="project-card active">
-                                <div class="card-bg">
-                                    <div class="card-label">PROTO.SITE</div>
-                                </div>
+                                <div class="card-label">PROTO.SITE</div>
+                                <div class="card-bg"></div>
                                 <div class="card-content">
                                     <h3>Cyberpunk Portfolio</h3>
                                     <p>High-performance CV built with Vanilla Web Components and Neumorphic design.</p>

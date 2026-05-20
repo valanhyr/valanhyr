@@ -81,7 +81,7 @@ export class ParticleGraph extends BaseComponent {
                 .wrap {
                     width: 100%;
                     height: 100%;
-                    background: #000;
+                    background: var(--bg);
                     overflow: hidden;
                 }
                 canvas {
@@ -136,6 +136,33 @@ export class ParticleGraph extends BaseComponent {
         });
 
         this.#start();
+    }
+
+    #drawGrid() {
+        const ctx = this._ctx;
+        const spacing = 60;
+        const offset = (this._pulseT * 10) % spacing;
+
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 255, 204, 0.03)';
+        ctx.lineWidth = 1;
+
+        // Vertical lines
+        for (let x = offset; x < this._w; x += spacing) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, this._h);
+            ctx.stroke();
+        }
+
+        // Horizontal lines
+        for (let y = offset; y < this._h; y += spacing) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(this._w, y);
+            ctx.stroke();
+        }
+        ctx.restore();
     }
 
     disconnectedCallback() {
@@ -436,20 +463,26 @@ export class ParticleGraph extends BaseComponent {
         ctx.clearRect(0, 0, this._w, this._h);
 
         // Background
-        ctx.fillStyle = '#000';
+        const styles = getComputedStyle(this);
+        const bgColor = styles.getPropertyValue('--bg').trim() || '#08080c';
+        const isLight = styles.getPropertyValue('--bg').includes('#f') || styles.getPropertyValue('--bg').includes('245');
+
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, this._w, this._h);
+
+        this.#drawGrid();
+
+        // Blending logic: 'lighter' works for dark, 'source-over' for light.
+        ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
 
         // Hovered parent (used to highlight its links)
         const hovered = this._nodes.find(n => n.depth === 1 && n.id === this._hoveredGroupId);
 
         // Edges
-        // - tree links: thickness fades slightly with depth
-        // - group-link: thicker (white) backbone between parent nodes
-        // - hovered tree links: pulsing highlight
         const highlighted = [];
         const hoverIntensity = hovered ? (hovered._hoverT ?? 0) : 0;
         const pulse = 0.5 + 0.5 * Math.sin((this._pulseT ?? 0) * 2 * Math.PI * 0.75);
-        const pulseK = 0.20 + 0.80 * pulse; // 0.20..1.0
+        const pulseK = 0.20 + 0.80 * pulse;
 
         for (const e of this._edges) {
             const dx = e.a.x - e.b.x;
@@ -473,11 +506,23 @@ export class ParticleGraph extends BaseComponent {
                 continue;
             }
 
-            const baseAlpha = isGroupLink ? 0.48 : clamp(0.42 - (depth - 1) * 0.06, 0.20, 0.42);
-            const alpha = clamp(baseAlpha - dist / 700, 0.10, isGroupLink ? 0.40 : 0.30);
+            const baseAlpha = isGroupLink ? 0.35 : clamp(0.30 - (depth - 1) * 0.05, 0.10, 0.30);
+            let alpha = clamp(baseAlpha - dist / 800, 0.05, isGroupLink ? 0.35 : 0.25);
+            
+            // Adjust alpha for light mode
+            if (isLight) alpha = clamp(alpha * 1.5, 0.1, 0.5);
 
-            ctx.lineWidth = isGroupLink ? 2.4 : clamp(1.55 - (depth - 2) * 0.18, 0.95, 1.55);
-            ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+            if (alpha <= 0.01) continue;
+
+            const grad = ctx.createLinearGradient(e.a.x, e.a.y, e.b.x, e.b.y);
+            const cA = e.a.groupRgb || { r: 255, g: 255, b: 255 };
+            const cB = e.b.groupRgb || { r: 255, g: 255, b: 255 };
+
+            grad.addColorStop(0, `rgba(${cA.r},${cA.g},${cA.b},${alpha})`);
+            grad.addColorStop(1, `rgba(${cB.r},${cB.g},${cB.b},${alpha})`);
+
+            ctx.lineWidth = isGroupLink ? 1.8 : clamp(1.2 - (depth - 2) * 0.15, 0.6, 1.2);
+            ctx.strokeStyle = grad;
 
             ctx.beginPath();
             ctx.moveTo(e.a.x, e.a.y);
@@ -485,22 +530,23 @@ export class ParticleGraph extends BaseComponent {
             ctx.stroke();
         }
 
-        // Draw highlighted edges last so they sit on top.
+        // Draw highlighted edges
         for (const { e, dist, depth } of highlighted) {
             const isDirectChildLink = Boolean(e.a && hovered && e.a.id === hovered.id);
+            const baseAlpha = clamp(0.4 - (depth - 1) * 0.05, 0.15, 0.4);
+            let alpha = clamp(baseAlpha - dist / 800, 0.1, 0.4);
 
-            const baseAlpha = clamp(0.42 - (depth - 1) * 0.06, 0.20, 0.42);
-            let alpha = clamp(baseAlpha - dist / 700, 0.10, 0.40);
+            const boost = (isDirectChildLink ? 0.5 : 0.25) * hoverIntensity * pulseK;
+            alpha = clamp(alpha + boost, 0.1, 0.9);
 
-            const boost = (isDirectChildLink ? 0.48 : 0.30) * hoverIntensity * pulseK;
-            alpha = clamp(alpha + boost, 0.18, 0.92);
+            const grad = ctx.createLinearGradient(e.a.x, e.a.y, e.b.x, e.b.y);
+            const hlRgb = hovered?.groupRgb || { r: 255, g: 255, b: 255 };
+            grad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${alpha})`);
+            grad.addColorStop(1, isLight ? `rgba(0,0,0,${alpha * 0.15})` : `rgba(255,255,255,${alpha * 0.5})`);
 
-            const baseWidth = clamp(1.55 - (depth - 2) * 0.18, 0.95, 1.55);
-            const wBoost = (isDirectChildLink ? 1.4 : 1.0) * hoverIntensity * pulseK;
-            ctx.lineWidth = Math.max(baseWidth, baseWidth + wBoost);
-
-            const hlRgb = hovered?.groupRgb || hovered?.rgb || { r: 255, g: 255, b: 255 };
-            ctx.strokeStyle = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${alpha})`;
+            const baseWidth = clamp(1.4 - (depth - 2) * 0.15, 0.8, 1.4);
+            ctx.lineWidth = baseWidth + (isDirectChildLink ? 1.5 : 0.5) * hoverIntensity * pulseK;
+            ctx.strokeStyle = grad;
 
             ctx.beginPath();
             ctx.moveTo(e.a.x, e.a.y);
@@ -509,7 +555,6 @@ export class ParticleGraph extends BaseComponent {
         }
 
         // Nodes
-        // Draw hovered parent last so it sits on top.
         const highlightedNodes = [];
         for (const n of this._nodes) {
             if (hovered && n === hovered) continue;
@@ -528,87 +573,123 @@ export class ParticleGraph extends BaseComponent {
                 continue;
             }
 
+            const radGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+            const rgb = n.rgb || { r: 255, g: 255, b: 255 };
+            
+            if (isLight) {
+                // Darker cores for visibility
+                radGrad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},${n.alpha})`);
+                radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
+            } else {
+                radGrad.addColorStop(0, `rgba(255,255,255,${n.alpha})`);
+                radGrad.addColorStop(0.4, `rgba(${rgb.r},${rgb.g},${rgb.b},${n.alpha * 0.8})`);
+                radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
+            }
+
             ctx.beginPath();
-            ctx.fillStyle = n.color;
-            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+            ctx.fillStyle = radGrad;
+            ctx.arc(n.x, n.y, n.r * 1.5, 0, Math.PI * 2);
             ctx.fill();
         }
 
-        // Draw highlighted children on top with group color + pulse.
+        // Draw highlighted children
         if (highlightedNodes.length) {
-            const hlRgb = hovered?.groupRgb || hovered?.rgb || { r: 255, g: 255, b: 255 };
-            const glow = 10 * hoverIntensity * pulseK;
-
-            ctx.save();
-            ctx.shadowColor = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0.55)`;
-            ctx.shadowBlur = glow;
-
+            const hlRgb = hovered?.groupRgb || { r: 255, g: 255, b: 255 };
             for (const n of highlightedNodes) {
                 const tDepth = clamp((n.depth - 1) / 5, 0, 1);
-                const rgb = mixRgb(hlRgb, { r: 255, g: 255, b: 255 }, 0.20 + tDepth * 0.45);
+                const rgb = mixRgb(hlRgb, { r: 255, g: 255, b: 255 }, 0.2 + tDepth * 0.4);
+                const a = clamp(0.2 + 0.7 * hoverIntensity * pulseK, 0.2, 0.95);
+                const rr = n.r * (1 + 0.2 * hoverIntensity * pulseK);
 
-                const baseA = clamp(0.22 - (n.depth - 2) * 0.03, 0.14, 0.22);
-                const a = clamp(baseA + 0.70 * hoverIntensity * pulseK, baseA, 0.95);
+                const radGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, rr * 1.5);
+                
+                if (isLight) {
+                    radGrad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${a})`);
+                    radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0)`);
+                } else {
+                    radGrad.addColorStop(0, `rgba(255,255,255,${a})`);
+                    radGrad.addColorStop(0.3, `rgba(${rgb.r},${rgb.g},${rgb.b},${a * 0.8})`);
+                    radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
+                }
 
-                const rr = n.r * (1 + 0.08 * hoverIntensity * pulseK);
-
+                ctx.save();
+                ctx.shadowColor = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${isLight ? 0.15 : 0.4})`;
+                ctx.shadowBlur = (isLight ? 4 : 15) * hoverIntensity * pulseK;
                 ctx.beginPath();
-                ctx.fillStyle = `rgba(${rgb.r},${rgb.g},${rgb.b},${a})`;
-                ctx.arc(n.x, n.y, rr, 0, Math.PI * 2);
+                ctx.fillStyle = radGrad;
+                ctx.arc(n.x, n.y, rr * 1.8, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.restore();
             }
-
-            ctx.restore();
         }
 
+        // Hovered parent
         if (hovered) {
             const t = hovered._hoverT ?? 0;
             const r = hovered.r * (1 + t * (this._hoverScale - 1));
+            const hlRgb = hovered.groupRgb || { r: 255, g: 255, b: 255 };
 
             ctx.save();
-            ctx.shadowColor = 'rgba(255,255,255,0.35)';
-            ctx.shadowBlur = 22;
+            ctx.shadowColor = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${isLight ? 0.25 : 0.6})`;
+            ctx.shadowBlur = (isLight ? 10 : 30) * t;
+
+            const radGrad = ctx.createRadialGradient(hovered.x, hovered.y, 0, hovered.x, hovered.y, r);
+            
+            if (isLight) {
+                radGrad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},1)`);
+                radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0.3)`);
+            } else {
+                radGrad.addColorStop(0, '#fff');
+                radGrad.addColorStop(0.2, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},1)`);
+                radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0)`);
+            }
 
             ctx.beginPath();
-            ctx.fillStyle = hovered.color;
-            ctx.arc(hovered.x, hovered.y, r, 0, Math.PI * 2);
+            ctx.fillStyle = radGrad;
+            ctx.arc(hovered.x, hovered.y, r * 1.2, 0, Math.PI * 2);
             ctx.fill();
 
+            // Technical Ring
             ctx.shadowBlur = 0;
-            ctx.lineWidth = 4;
-            ctx.strokeStyle = 'rgba(0,255,255,0.9)';
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${0.8 * t})`;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.arc(hovered.x, hovered.y, r * 1.4, this._pulseT * 2, this._pulseT * 2 + Math.PI * 1.5);
             ctx.stroke();
+            ctx.restore();
 
-            // Basic info inside the node (parents only for now)
+            // Labels for hovered
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            ctx.font = '900 13px "JetBrains Mono", monospace';
 
-            ctx.fillStyle = 'rgba(255,255,255,0.92)';
-            ctx.font = '900 14px monospace';
-            ctx.fillText(hovered.label, hovered.x, hovered.y - 10);
+            const lum = luminance(hlRgb);
+            const isDarkText = lum > 0.6;
+
+            ctx.fillStyle = isLight ? (isDarkText ? '#000' : '#fff') : (isDarkText ? 'rgba(0,0,0,0.85)' : '#fff');
+            ctx.fillText(hovered.label, hovered.x, hovered.y - 12);
 
             if (hovered.hoverInfo) {
-                ctx.fillStyle = 'rgba(255,255,255,0.82)';
-                ctx.font = '800 12px monospace';
-                ctx.fillText(hovered.hoverInfo, hovered.x, hovered.y + 12);
+                ctx.font = '700 10px "JetBrains Mono", monospace';
+                ctx.fillStyle = isLight ? (isDarkText ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)') : (isDarkText ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)');
+                ctx.fillText(hovered.hoverInfo, hovered.x, hovered.y + 14);
             }
-            ctx.restore();
         }
 
-        // Labels: always visible, scaled by depth (size + tone)
-        // (skip hovered parent because it renders its label/info inside the node)
+        // General Labels
+        ctx.globalCompositeOperation = 'source-over';
         ctx.textBaseline = 'top';
         ctx.textAlign = 'left';
+        const labelPrefix = isLight ? 'rgba(0,0,0,' : 'rgba(255,255,255,';
+
         for (const n of this._nodes) {
             if (n.depth === 1 && n.id === this._hoveredGroupId) continue;
-
-            const fontSize = clamp(14 - (n.depth - 1) * 1.6 + n.r * 0.2, 9, 14);
-            ctx.font = `800 ${fontSize}px monospace`;
-
-            const labelAlpha = clamp(0.95 - (n.depth - 1) * 0.10, 0.55, 0.95);
-            ctx.fillStyle = `rgba(255,255,255,${labelAlpha})`;
-
-            ctx.fillText(n.label, n.x + n.r + 4, n.y - n.r - 2);
+            const fontSize = clamp(11 - (n.depth - 1) * 1.2, 8, 11);
+            ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
+            const labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
+            ctx.fillStyle = `${labelPrefix}${labelAlpha})`;
+            ctx.fillText(n.label, n.x + n.r + 6, n.y - n.r - 2);
         }
     }
 }
