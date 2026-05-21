@@ -8,7 +8,7 @@ export class SanityService {
         // Simulate network latency
         await new Promise(r => setTimeout(r, 600));
 
-        const { default: data } = await import('../store/cv.json', { assert: { type: 'json' } });
+        const { default: data } = await import('../store/cv.json', { with: { type: 'json' } });
 
         // Basic GROQ-lite parser for *[_type == "xyz"]
         const match = query.match(/_type\s*==\s*['"]([^'"]+)['"]/);
