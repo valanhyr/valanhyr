@@ -1,10 +1,16 @@
 import { BaseComponent } from '../BaseComponent.js';
-import { store } from '../../store/state.js';
+import { SanityService } from '../../services/SanityService.js';
 
 export class CvExperience extends BaseComponent {
-    connectedCallback() {
-        this.bindState('cv', () => this.#render());
-        this.#render();
+    async connectedCallback() {
+        this.showSkeleton('<div class="skeleton" style="height: 300px;"></div>');
+        try {
+            const experience = await SanityService.fetch('*[_type == "experience"]');
+            this.#render(experience);
+        } catch (error) {
+            console.error('Failed to fetch experience:', error);
+            this.#render([]);
+        }
         this.#setupDynamicLine();
     }
 
@@ -43,10 +49,7 @@ export class CvExperience extends BaseComponent {
         setTimeout(handleScroll, 100);
     }
 
-    #render() {
-        const cv = store.state.cv;
-        const items = Array.isArray(cv?.experience) ? cv.experience : [];
-
+    #render(items = []) {
         this.render(`
             <style>
                 :host { display: block; }

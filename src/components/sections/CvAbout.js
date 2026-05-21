@@ -1,23 +1,27 @@
 import { BaseComponent } from '../BaseComponent.js';
-import { store } from '../../store/state.js';
+import { SanityService } from '../../services/SanityService.js';
 
 export class CvAbout extends BaseComponent {
-    connectedCallback() {
-        this.bindState('cv', () => this.#render());
-        this.#render();
+    async connectedCallback() {
+        this.showSkeleton('<div class="skeleton" style="height: 200px;"></div>');
+        try {
+            const data = await SanityService.fetch('*[_type == "about"]');
+            const aboutData = data[0] || {};
+            this.#render(aboutData);
+        } catch (error) {
+            console.error('Failed to fetch about:', error);
+            this.#render({});
+        }
     }
 
-    #render() {
-        const cv = store.state.cv;
-        const about = cv?.about;
-
-        const title = about?.title ?? 'About';
-        const paragraphs = Array.isArray(about?.paragraphs) ? about.paragraphs : [
-            cv?.basics?.summary ?? 'Write a short summary about your profile, values, and what you enjoy building.',
+    #render(data = {}) {
+        const title = data.title ?? 'About';
+        const paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [
+            'Write a short summary about your profile, values, and what you enjoy building.',
             'Keep it clear, specific, and impact-focused.'
         ];
 
-        const highlights = Array.isArray(about?.highlights) ? about.highlights : [
+        const highlights = Array.isArray(data.highlights) ? data.highlights : [
             'Performance-first mindset',
             'Accessibility by default',
             'Clean architecture, zero-fluff code'

@@ -3,7 +3,7 @@ import { SanityService } from '../../services/SanityService.js';
 
 export class CvProjects extends BaseComponent {
     async connectedCallback() {
-        this.#renderSkeleton();
+        this.showSkeleton('<div class="skeleton" style="height: 440px;"></div>');
         try {
             const projects = await SanityService.fetch('*[_type == "project"]');
             this.#render(projects);
@@ -11,30 +11,6 @@ export class CvProjects extends BaseComponent {
             console.error('Failed to fetch projects:', error);
             this.#render([]);
         }
-    }
-
-    #renderSkeleton() {
-        this.render(`
-            <style>
-                :host { display: block; }
-                section { scroll-margin-top: 96px; }
-                .skeleton {
-                    background: var(--surface-2);
-                    height: 440px;
-                    border-radius: var(--radius);
-                    animation: pulse 1.5s infinite;
-                    border: 1px solid var(--glass-border);
-                }
-                @keyframes pulse {
-                    0% { opacity: 0.6; }
-                    50% { opacity: 0.3; }
-                    100% { opacity: 0.6; }
-                }
-            </style>
-            <section id="projects">
-                <div class="skeleton"></div>
-            </section>
-        `);
     }
 
     #render(items = []) {

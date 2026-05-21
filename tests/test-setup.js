@@ -89,7 +89,13 @@ global.IntersectionObserver = class {
 };
 
 // If you need window or document mocks later, we can add them here
-global.window = global;
+global.window = {
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    innerHeight: 1000,
+    scrollY: 0
+};
+Object.assign(global.window, global);
 global.document = {
     createElement: (tag) => new MockHTMLElement()
 };

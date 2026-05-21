@@ -1,5 +1,5 @@
 import { BaseComponent } from '../BaseComponent.js';
-import { store } from '../../store/state.js';
+import { SanityService } from '../../services/SanityService.js';
 
 function collectLeaves(value, out = []) {
     if (Array.isArray(value)) {
@@ -17,15 +17,20 @@ function collectLeaves(value, out = []) {
 }
 
 export class CvSkills extends BaseComponent {
-    connectedCallback() {
-        this.bindState('cv', () => this.#render());
-        this.#render();
+    async connectedCallback() {
+        this.showSkeleton('<div class="skeleton" style="height: 300px;"></div>');
+        try {
+            const data = await SanityService.fetch('*[_type == "skills"]');
+            // Assuming data is an array and we want the first item or it's already the structure we need
+            const skillsData = data[0] || {};
+            this.#render(skillsData.groups || {});
+        } catch (error) {
+            console.error('Failed to fetch skills:', error);
+            this.#render({});
+        }
     }
 
-    #render() {
-        const cv = store.state.cv;
-        const groups = cv?.graph?.groups ?? {};
-
+    #render(groups = {}) {
         const groupEntries = Object.entries(groups);
 
         this.render(`
