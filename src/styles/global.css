@@ -178,6 +178,42 @@ code {
         border-radius: 0 !important;
     }
     
-    a::after { content: " (" attr(href) ")"; font-size: 0.8rem; }
-    .reveal-hidden { opacity: 1 !important; transform: none !important; }
+/* --- Reveal Protocol --- */
+.reveal-hidden {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    will-change: opacity, transform;
 }
+
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered entry for children of revealed sections */
+.reveal-visible ui-card {
+    animation: reveal-box 0.8s var(--ease) both;
+}
+
+@keyframes reveal-box {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+        filter: brightness(2);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-hidden {
+        transition: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+

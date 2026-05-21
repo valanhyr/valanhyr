@@ -107,6 +107,10 @@ export class CvSkills extends BaseComponent {
                     transform: translateY(10px);
                 }
 
+                :host-context(.reveal-visible) ui-tag {
+                    animation: fadeInUp 0.4s var(--ease) forwards;
+                }
+
                 :host(.reveal-visible) ui-tag {
                     animation: fadeInUp 0.4s var(--ease) forwards;
                 }

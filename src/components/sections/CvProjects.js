@@ -63,6 +63,16 @@ export class CvProjects extends BaseComponent {
                     cursor: pointer;
                     display: flex;
                     flex-direction: column;
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+
+                :host(.reveal-visible) .project-card {
+                    animation: fadeInUp 0.5s var(--ease) forwards;
+                }
+
+                @keyframes fadeInUp {
+                    to { opacity: 1; transform: translateY(0); }
                 }
 
                 .project-card.active {
