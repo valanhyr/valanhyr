@@ -8,7 +8,14 @@ class MockShadowRoot {
         this.innerHTML = '';
     }
     querySelector(selector) {
-        // Very basic mock for querying
+        return null;
+    }
+    querySelectorAll(selector) {
+        return [];
+    }
+    addEventListener(type, listener) {}
+    removeEventListener(type, listener) {}
+    getElementById(id) {
         return null;
     }
 }
@@ -18,6 +25,13 @@ class MockHTMLElement {
         this._shadowRoot = null;
         this.innerHTML = '';
         this.style = {};
+        this.classList = {
+            add: () => {},
+            remove: () => {},
+            contains: () => false,
+            toggle: () => {}
+        };
+        this.attributes = {};
     }
 
     attachShadow(options) {
@@ -28,6 +42,23 @@ class MockHTMLElement {
     get shadowRoot() {
         return this._shadowRoot;
     }
+
+    setAttribute(name, value) {
+        this.attributes[name] = value;
+    }
+
+    getAttribute(name) {
+        return this.attributes[name] || null;
+    }
+
+    removeAttribute(name) {
+        delete this.attributes[name];
+    }
+
+    addEventListener(type, listener) {}
+    removeEventListener(type, listener) {}
+    querySelector(selector) { return null; }
+    querySelectorAll(selector) { return []; }
 
     connectedCallback() {}
     disconnectedCallback() {}
@@ -40,7 +71,10 @@ global.customElements = {
     define: (tag, cls) => {
         global.customElements.registry[tag] = cls;
     },
-    get: (tag) => global.customElements.registry[tag]
+    get: (tag) => global.customElements.registry[tag],
+    reset: () => {
+        global.customElements.registry = {};
+    }
 };
 
 global.IntersectionObserver = class {
