@@ -1,71 +1,42 @@
-// tests/components/homeview.test.js
+import '../test-setup.js';
+import test from 'node:test';
+import assert from 'node:assert';
+import { HomeView } from '../../src/components/views/HomeView.js';
 
-// Mock browser globals
-class MockHTMLElement {
-    constructor() {
-        this.shadowRoot = { innerHTML: '' };
-    }
-    attachShadow() { return this.shadowRoot; }
-}
+test('HomeView Component', async (t) => {
+    const view = new HomeView();
 
-global.HTMLElement = MockHTMLElement;
+    await t.test('should register custom element', () => {
+        assert.ok(global.customElements.get('home-view'));
+    });
 
-global.customElements = {
-    define: (tag, cls) => {
-        global.customElements.registry = global.customElements.registry || {};
-        global.customElements.registry[tag] = cls;
-    }
-};
-
-async function runTest() {
-    try {
-        const { HomeView } = await import('../../src/components/views/HomeView.js');
-        const view = new HomeView();
-
-        if (!global.customElements.registry['home-view']) {
-            throw new Error('home-view not registered');
-        }
-
+    await t.test('should render all child sections in correct order', () => {
         view.connectedCallback();
-
         const html = view.shadowRoot.innerHTML;
-
-        const tags = [
-            'hero-banner',
-            'cv-about',
+        
+        const sections = [
+            'hero-banner', 
+            'cv-about', 
             'cv-platform',
-            'cv-skills',
-            'cv-experience',
-            'cv-projects',
-            'cv-education',
+            'cv-skills', 
+            'cv-experience', 
+            'cv-projects', 
+            'cv-education', 
             'cv-contact'
         ];
-
-        for (const tag of tags) {
-            if (!html.includes(`<${tag}`)) {
-                throw new Error(`HomeView did not render ${tag}`);
-            }
+        
+        for (const tag of sections) {
+            assert.match(html, new RegExp(`<${tag}`), `Missing section: ${tag}`);
         }
 
-        // Order checks (skills before experience)
-        const iSkills = html.indexOf('<cv-skills');
-        const iExp = html.indexOf('<cv-experience');
-        if (iSkills === -1 || iExp === -1 || iSkills > iExp) {
-            throw new Error('Expected Skills section to appear before Experience');
-        }
-
-        // Platform should be between About and Skills
+        // Order checks
         const iAbout = html.indexOf('<cv-about');
         const iPlatform = html.indexOf('<cv-platform');
-        if (iAbout === -1 || iPlatform === -1 || iSkills === -1 || !(iAbout < iPlatform && iPlatform < iSkills)) {
-            throw new Error('Expected Platform section between About and Skills');
-        }
+        const iSkills = html.indexOf('<cv-skills');
+        const iExp = html.indexOf('<cv-experience');
 
-        console.log('✅ HomeView test passed!');
-    } catch (err) {
-        console.error('❌ HomeView test failed:', err.message);
-        process.exit(1);
-    }
-}
-
-runTest();
+        assert.ok(iAbout < iPlatform, 'About should be before Platform');
+        assert.ok(iPlatform < iSkills, 'Platform should be before Skills');
+        assert.ok(iSkills < iExp, 'Skills should be before Experience');
+    });
+});
