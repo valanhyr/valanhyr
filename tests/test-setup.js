@@ -51,6 +51,10 @@ class MockHTMLElement {
         return this.attributes[name] || null;
     }
 
+    hasAttribute(name) {
+        return name in this.attributes;
+    }
+
     removeAttribute(name) {
         delete this.attributes[name];
     }
