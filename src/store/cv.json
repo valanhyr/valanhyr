@@ -1,38 +1,101 @@
-{
-  "basics": {
+[
+  {
+    "_type": "basics",
+    "_id": "basics",
     "name": "Your Name",
     "role": "Software Developer",
     "location": "Remote / Your City",
     "summary": "I build reliable web experiences with a focus on performance, accessibility, and clean architecture.",
     "status": "Open to opportunities"
   },
-  "links": [
-    { "label": "GitHub", "href": "https://github.com/your-handle" },
-    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/your-handle" },
-    { "label": "Email", "href": "mailto:you@example.com" }
-  ],
-  "navigation": [
-    { "label": "Home", "href": "#top" },
-    { "label": "About", "href": "#about" },
-    { "label": "Platform", "href": "#platform" },
-    { "label": "Skills", "href": "#skills" },
-    { "label": "Experience", "href": "#experience" },
-    { "label": "Projects", "href": "#projects" },
-    { "label": "Education", "href": "#education" },
-    { "label": "Contact", "href": "#contact" }
-  ],
-  "hero": {
+  {
+    "_type": "link",
+    "_id": "link-github",
+    "label": "GitHub",
+    "href": "https://github.com/your-handle"
+  },
+  {
+    "_type": "link",
+    "_id": "link-linkedin",
+    "label": "LinkedIn",
+    "href": "https://www.linkedin.com/in/your-handle"
+  },
+  {
+    "_type": "link",
+    "_id": "link-email",
+    "label": "Email",
+    "href": "mailto:you@example.com"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-home",
+    "label": "Home",
+    "href": "#top"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-about",
+    "label": "About",
+    "href": "#about"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-platform",
+    "label": "Platform",
+    "href": "#platform"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-skills",
+    "label": "Skills",
+    "href": "#skills"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-experience",
+    "label": "Experience",
+    "href": "#experience"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-projects",
+    "label": "Projects",
+    "href": "#projects"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-education",
+    "label": "Education",
+    "href": "#education"
+  },
+  {
+    "_type": "navItem",
+    "_id": "nav-contact",
+    "label": "Contact",
+    "href": "#contact"
+  },
+  {
+    "_type": "hero",
+    "_id": "hero",
     "headline": "Evolución técnica de producto web en producción",
     "subheadline": "Microfrontends, design systems y delivery sin perder velocidad.",
-    "primaryCta": { "label": "Contact", "href": "#contact" },
-    "secondaryCta": { "label": "Download PDF", "href": "#" },
+    "primaryCta": {
+      "label": "Contact",
+      "href": "#contact"
+    },
+    "secondaryCta": {
+      "label": "Download PDF",
+      "href": "#"
+    },
     "proofs": [
       "Design system + librería consumida por microfronts",
       "Arquitectura técnica y evolución incremental sobre web existente",
       "Visión end-to-end: entornos, pipelines, prácticas de entrega"
     ]
   },
-  "platform": {
+  {
+    "_type": "platform",
+    "_id": "platform",
     "title": "Platform & Architecture",
     "bullets": [
       "Definí patrones de integración y contratos para microfrontends.",
@@ -41,7 +104,9 @@
       "Contribuí a pipelines/entornos para mejorar delivery y confiabilidad."
     ]
   },
-  "about": {
+  {
+    "_type": "about",
+    "_id": "about",
     "title": "About",
     "paragraphs": [
       "I build user-facing products with a strong focus on performance, accessibility, and maintainable systems.",
@@ -49,124 +114,257 @@
     ],
     "highlights": [
       "Performance-first mindset",
-      "Accessible by default",
+      "Accessibility by default",
       "Clean, modular architecture",
       "Fast iteration without hacks"
     ]
   },
-  "experience": [
-    {
-      "company": "Tech Innovators",
-      "role": "Senior Frontend Developer",
-      "period": "2023 — Present",
-      "location": "Remote",
-      "stack": ["TypeScript", "Angular", "Signals", "SASS"],
-      "achievements": [
-        "Led the migration of a legacy monolithic frontend to a modern Signal-based architecture.",
-        "Improved Lighthouse scores across the main application from 60 to 95+.",
-        "Mentored junior developers and established high-quality PR review standards."
-      ]
-    },
-    {
-      "company": "Global Solutions",
-      "role": "Full Stack Developer",
-      "period": "2021 — 2023",
-      "location": "Hybrid / Madrid",
-      "stack": ["Node.js", "Express", "PostgreSQL", "React"],
-      "achievements": [
-        "Designed and implemented a scalable REST API handling over 1M requests per day.",
-        "Reduced database query times by 40% through advanced indexing and query optimization.",
-        "Automated deployment pipelines using Docker and GitHub Actions, reducing ship time by 50%."
-      ]
-    },
-    {
-      "company": "Creative Agency",
-      "role": "Web Developer",
-      "period": "2019 — 2021",
-      "location": "On-site / Barcelona",
-      "stack": ["HTML5", "CSS3", "JavaScript", "PHP"],
-      "achievements": [
-        "Developed pixel-perfect, responsive landing pages for international clients.",
-        "Integrated third-party APIs for payment gateways and CRM systems.",
-        "Optimized website assets and delivery, achieving under 1s load times on mobile."
-      ]
+  {
+    "_type": "experience",
+    "_id": "exp-tech-innovators",
+    "company": "Tech Innovators",
+    "role": "Senior Frontend Developer",
+    "period": "2023 — Present",
+    "location": "Remote",
+    "stack": [
+      "TypeScript",
+      "Angular",
+      "Signals",
+      "SASS"
+    ],
+    "achievements": [
+      "Led the migration of a legacy monolithic frontend to a modern Signal-based architecture.",
+      "Improved Lighthouse scores across the main application from 60 to 95+.",
+      "Mentored junior developers and established high-quality PR review standards."
+    ]
+  },
+  {
+    "_type": "experience",
+    "_id": "exp-global-solutions",
+    "company": "Global Solutions",
+    "role": "Full Stack Developer",
+    "period": "2021 — 2023",
+    "location": "Hybrid / Madrid",
+    "stack": [
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "React"
+    ],
+    "achievements": [
+      "Designed and implemented a scalable REST API handling over 1M requests per day.",
+      "Reduced database query times by 40% through advanced indexing and query optimization.",
+      "Automated deployment pipelines using Docker and GitHub Actions, reducing ship time by 50%."
+    ]
+  },
+  {
+    "_type": "experience",
+    "_id": "exp-creative-agency",
+    "company": "Creative Agency",
+    "role": "Web Developer",
+    "period": "2019 — 2021",
+    "location": "On-site / Barcelona",
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP"
+    ],
+    "achievements": [
+      "Developed pixel-perfect, responsive landing pages for international clients.",
+      "Integrated third-party APIs for payment gateways and CRM systems.",
+      "Optimized website assets and delivery, achieving under 1s load times on mobile."
+    ]
+  },
+  {
+    "_type": "project",
+    "_id": "proj-cv-vanilla",
+    "name": "CV Website (Vanilla)",
+    "description": "Neo-brutalist CV built with Web Components, JSON-driven content, and a canvas particle graph.",
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "highlights": [
+      "ES Modules + Web Components",
+      "Zero framework / no bundler",
+      "Data-driven sections"
+    ],
+    "links": [
+      {
+        "label": "Repo",
+        "href": "#"
+      },
+      {
+        "label": "Demo",
+        "href": "#"
+      }
+    ],
+    "mainImage": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-portfolio-png"
+      }
     }
-  ],
-  "projects": [
-    {
-      "name": "CV Website (Vanilla)",
-      "description": "Neo-brutalist CV built with Web Components, JSON-driven content, and a canvas particle graph.",
-      "stack": ["HTML", "CSS", "JavaScript"],
-      "highlights": [
-        "ES Modules + Web Components",
-        "Zero framework / no bundler",
-        "Data-driven sections"
-      ],
-      "links": [
-        { "label": "Repo", "href": "#" },
-        { "label": "Demo", "href": "#" }
-      ]
-    },
-    {
-      "name": "Mana Forge (Full Stack Monorepo)",
-      "description": "MTG deck analysis platform with a React UI, a Spring Boot REST API, and a stateless FastAPI AI engine (Groq Llama 3.3) delivering structured JSON insights.",
-      "stack": [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS",
-        "Java",
-        "Spring Boot",
-        "Python",
-        "FastAPI",
-        "Couchbase",
-        "Docker"
-      ],
-      "highlights": [
-        "Monorepo full-stack dev via Docker Compose",
-        "AI service is JSON-only + stateless (structured insights)",
-        "Couchbase caching (TTL) + i18n via Accept-Language"
-      ],
-      "links": [
-        { "label": "Repo", "href": "#" },
-        { "label": "Demo", "href": "#" }
-      ]
-    }
-  ],
-  "education": [
-    {
-      "org": "University / Bootcamp",
-      "title": "Software Engineering",
-      "period": "2019 — 2023",
-      "details": [
-        "Algorithms & data structures",
-        "Web architecture",
-        "Team projects"
-      ]
-    }
-  ],
-  "contact": {
+  },
+  {
+    "_type": "project",
+    "_id": "proj-mana-forge",
+    "name": "Mana Forge (Full Stack Monorepo)",
+    "description": "MTG deck analysis platform with a React UI, a Spring Boot REST API, and a stateless FastAPI AI engine (Groq Llama 3.3) delivering structured JSON insights.",
+    "stack": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "Tailwind CSS",
+      "Java",
+      "Spring Boot",
+      "Python",
+      "FastAPI",
+      "Couchbase",
+      "Docker"
+    ],
+    "highlights": [
+      "Monorepo full-stack dev via Docker Compose",
+      "AI service is JSON-only + stateless (structured insights)",
+      "Couchbase caching (TTL) + i18n via Accept-Language"
+    ],
+    "links": [
+      {
+        "label": "Repo",
+        "href": "#"
+      },
+      {
+        "label": "Demo",
+        "href": "#"
+      }
+    ]
+  },
+  {
+    "_type": "education",
+    "_id": "edu-university",
+    "org": "University / Bootcamp",
+    "title": "Software Engineering",
+    "period": "2019 — 2023",
+    "details": [
+      "Algorithms & data structures",
+      "Web architecture",
+      "Team projects"
+    ]
+  },
+  {
+    "_type": "contact",
+    "_id": "contact",
     "email": "you@example.com",
     "cta": "Let’s build something great."
   },
-  "graph": {
+  {
+    "_type": "skill",
+    "_id": "skill-html",
+    "name": "HTML",
+    "group": "frontend",
+    "level": "core"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-css",
+    "name": "CSS",
+    "group": "frontend",
+    "level": "core"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-js",
+    "name": "JavaScript",
+    "group": "frontend",
+    "level": "core"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-web-components",
+    "name": "Web Components",
+    "group": "frontend",
+    "level": "platform"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-a11y",
+    "name": "Accessibility",
+    "group": "frontend",
+    "level": "platform"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-node",
+    "name": "Node.js",
+    "group": "backend"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-rest",
+    "name": "REST",
+    "group": "backend"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-sql",
+    "name": "SQL",
+    "group": "backend"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-git",
+    "name": "Git",
+    "group": "tools"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-cicd",
+    "name": "CI/CD",
+    "group": "tools"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-jenkins",
+    "name": "Jenkins",
+    "group": "tools"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-datadog",
+    "name": "Datadog",
+    "group": "tools"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-spec-driven",
+    "name": "Spec-driven",
+    "group": "ai",
+    "level": "methods"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-tdd",
+    "name": "TDD",
+    "group": "ai",
+    "level": "methods"
+  },
+  {
+    "_type": "skill",
+    "_id": "skill-llm-tooling",
+    "name": "LLM tooling",
+    "group": "ai",
+    "level": "tooling"
+  },
+  {
+    "_type": "graphSettings",
+    "_id": "graph-settings",
     "palette": {
       "frontend": "#3b82f6",
       "backend": "#ef4444",
       "tools": "#22c55e",
       "ai": "#facc15"
-    },
-    "groups": {
-      "frontend": {
-        "core": ["HTML", "CSS", "JavaScript"],
-        "platform": ["Web Components", "Accessibility"]
-      },
-      "backend": ["Node.js", "REST", "SQL"],
-      "tools": ["Git", "CI/CD", "Jenkins", "Datadog"],
-      "ai": {
-        "methods": ["Spec-driven", "TDD"],
-        "tooling": ["LLM tooling"]
-      }
     }
   }
-}
+]

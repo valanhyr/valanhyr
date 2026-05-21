@@ -6,8 +6,10 @@ import { SanityService } from '../../src/services/SanityService.js';
 test('SanityService', async (t) => {
     await t.test('fetch should return all data when no _type match', async () => {
         const data = await SanityService.fetch('*');
-        assert.ok(data.basics);
-        assert.equal(data.basics.name, 'Your Name');
+        assert.ok(Array.isArray(data));
+        const basics = data.find(item => item._type === 'basics');
+        assert.ok(basics);
+        assert.equal(basics.name, 'Your Name');
     });
 
     await t.test('urlFor should return a builder', () => {
@@ -31,9 +33,9 @@ test('SanityService', async (t) => {
     });
 
     await t.test('fetch should filter by _type if match found', async () => {
-        // Since current cv.json doesn't have _type, this should return empty array
         const data = await SanityService.fetch('*[_type == "project"]');
         assert.ok(Array.isArray(data));
-        assert.equal(data.length, 0);
+        assert.equal(data.length, 2);
+        assert.ok(data[0]._type === 'project');
     });
 });
