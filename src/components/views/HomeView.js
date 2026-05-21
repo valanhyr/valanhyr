@@ -16,6 +16,7 @@ export class HomeView extends BaseComponent {
                     margin: 0 auto;
                     display: grid;
                     gap: var(--space-xl);
+                    padding-top: 80px;
                     padding-bottom: var(--space-xl);
                 }
 

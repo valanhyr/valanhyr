@@ -252,9 +252,11 @@ export class AppNavbar extends BaseComponent {
         this.render(`
             <style>
                 header {
-                    position: sticky;
+                    position: fixed;
                     top: 0;
-                    z-index: 100;
+                    left: 0;
+                    width: 100%;
+                    z-index: 1000;
                     background: var(--glass-bg);
                     backdrop-filter: blur(var(--glass-blur));
                     -webkit-backdrop-filter: blur(var(--glass-blur));
