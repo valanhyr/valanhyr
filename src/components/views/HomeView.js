@@ -1,5 +1,6 @@
 // src/components/views/HomeView.js
 import { BaseComponent } from '../BaseComponent.js';
+import '../layout/AppFooter.js';
 
 export class HomeView extends BaseComponent {
     connectedCallback() {
@@ -47,6 +48,7 @@ export class HomeView extends BaseComponent {
                 <cv-projects id="projects" class="reveal-hidden"></cv-projects>
                 <cv-education id="education" class="reveal-hidden"></cv-education>
                 <cv-contact id="contact" class="reveal-hidden"></cv-contact>
+                <app-footer></app-footer>
             </main>
         `);
     }
