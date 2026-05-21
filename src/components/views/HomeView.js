@@ -40,6 +40,7 @@ export class HomeView extends BaseComponent {
             <main id="top">
                 <hero-banner></hero-banner>
                 <cv-about id="about" class="reveal-hidden"></cv-about>
+                <cv-platform id="platform" class="reveal-hidden"></cv-platform>
                 <cv-skills id="skills" class="reveal-hidden"></cv-skills>
                 <cv-experience id="experience" class="reveal-hidden"></cv-experience>
                 <cv-projects id="projects" class="reveal-hidden"></cv-projects>
