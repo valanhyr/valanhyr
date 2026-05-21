@@ -6,11 +6,32 @@ export class CvProjects extends BaseComponent {
         this.showSkeleton('<div class="skeleton" style="height: 440px;"></div>');
         try {
             const projects = await SanityService.fetch('*[_type == "project"]');
-            this.#render(projects);
+            if (!projects || projects.length === 0) {
+                this.#renderEmpty();
+            } else {
+                this.#render(projects);
+            }
         } catch (error) {
             console.error('Failed to fetch projects:', error);
-            this.#render([]);
+            this.showError('CMS_FETCH_FAILED');
         }
+    }
+
+    #renderEmpty() {
+        this.render(`
+            <style>
+                .empty { 
+                    padding: 3rem; 
+                    text-align: center; 
+                    border: 1px dashed var(--glass-border);
+                    border-radius: var(--radius);
+                    opacity: 0.5;
+                }
+            </style>
+            <ui-card>
+                <div class="empty">NO_PROJECTS_FOUND_IN_DATABASE</div>
+            </ui-card>
+        `);
     }
 
     #render(items = []) {

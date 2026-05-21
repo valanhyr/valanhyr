@@ -7,11 +7,26 @@ export class CvAbout extends BaseComponent {
         try {
             const data = await SanityService.fetch('*[_type == "about"]');
             const aboutData = data[0] || {};
-            this.#render(aboutData);
+            if (Object.keys(aboutData).length === 0) {
+                this.#renderEmpty();
+            } else {
+                this.#render(aboutData);
+            }
         } catch (error) {
             console.error('Failed to fetch about:', error);
-            this.#render({});
+            this.showError('PROFILE_OFFLINE');
         }
+    }
+
+    #renderEmpty() {
+        this.render(`
+            <style>
+                .empty { padding: 2rem; text-align: center; opacity: 0.5; font-family: var(--font-mono); }
+            </style>
+            <ui-card>
+                <div class="empty">BIO_NOT_FOUND_IN_SYSTEM</div>
+            </ui-card>
+        `);
     }
 
     #render(data = {}) {

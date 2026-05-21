@@ -20,14 +20,39 @@ export class CvSkills extends BaseComponent {
     async connectedCallback() {
         this.showSkeleton('<div class="skeleton" style="height: 300px;"></div>');
         try {
-            const data = await SanityService.fetch('*[_type == "skills"]');
-            // Assuming data is an array and we want the first item or it's already the structure we need
-            const skillsData = data[0] || {};
-            this.#render(skillsData.groups || {});
+            const skills = await SanityService.fetch('*[_type == "skill"]');
+            if (!skills || skills.length === 0) {
+                this.#renderEmpty();
+            } else {
+                const groups = skills.reduce((acc, skill) => {
+                    const group = skill.group || 'others';
+                    if (!acc[group]) acc[group] = [];
+                    acc[group].push(skill.name);
+                    return acc;
+                }, {});
+                this.#render(groups);
+            }
         } catch (error) {
             console.error('Failed to fetch skills:', error);
-            this.#render({});
+            this.showError('DATABASE_ACCESS_DENIED');
         }
+    }
+
+    #renderEmpty() {
+        this.render(`
+            <style>
+                .empty { 
+                    padding: 2rem; 
+                    text-align: center; 
+                    border: 1px dashed var(--glass-border);
+                    border-radius: var(--radius);
+                    opacity: 0.5;
+                }
+            </style>
+            <ui-card>
+                <div class="empty">STACK_REGISTRY_EMPTY</div>
+            </ui-card>
+        `);
     }
 
     #render(groups = {}) {

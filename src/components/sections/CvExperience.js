@@ -6,10 +6,14 @@ export class CvExperience extends BaseComponent {
         this.showSkeleton('<div class="skeleton" style="height: 300px;"></div>');
         try {
             const experience = await SanityService.fetch('*[_type == "experience"]');
-            this.#render(experience);
+            if (!experience || experience.length === 0) {
+                this.#renderEmpty();
+            } else {
+                this.#render(experience);
+            }
         } catch (error) {
             console.error('Failed to fetch experience:', error);
-            this.#render([]);
+            this.showError('TIMELINE_SYNC_LOST');
         }
         this.#setupDynamicLine();
     }
@@ -47,6 +51,24 @@ export class CvExperience extends BaseComponent {
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         setTimeout(handleScroll, 100);
+    }
+
+    #renderEmpty() {
+        this.render(`
+            <style>
+                .empty { 
+                    padding: 2rem; 
+                    text-align: center; 
+                    border: 1px dashed var(--glass-border);
+                    border-radius: var(--radius);
+                    opacity: 0.5;
+                    font-family: var(--font-mono);
+                }
+            </style>
+            <ui-card>
+                <div class="empty">NO_EXPERIENCE_DATA_AVAILABLE</div>
+            </ui-card>
+        `);
     }
 
     #render(items = []) {
@@ -238,31 +260,7 @@ export class CvExperience extends BaseComponent {
                                     ` : ''}
                                 </article>
                             </div>
-                        `).join('') : `
-                            <div class="timeline-slot reached">
-                                <span class="node"></span>
-                                <article class="item">
-                                    <div class="row">
-                                        <div>
-                                            <div class="company">Example Corp</div>
-                                            <div class="role">Frontend Engineer</div>
-                                        </div>
-                                        <div class="period">2023 — Present • Remote</div>
-                                    </div>
-                                    <ul>
-                                        <li>Built UI systems with strong accessibility standards.</li>
-                                        <li>Improved performance and stability with measurable impact.</li>
-                                        <li>Collaborated across product, design, and backend teams.</li>
-                                    </ul>
-                                    <div class="stack">
-                                        <ui-tag>HTML</ui-tag>
-                                        <ui-tag>CSS</ui-tag>
-                                        <ui-tag>JS</ui-tag>
-                                        <ui-tag>Node</ui-tag>
-                                    </div>
-                                </article>
-                            </div>
-                        `}
+                        `).join('') : ''}
                     </div>
                 </ui-card>
             </section>
