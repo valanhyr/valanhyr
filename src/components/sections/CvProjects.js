@@ -1,15 +1,43 @@
 import { BaseComponent } from '../BaseComponent.js';
-import { store } from '../../store/state.js';
+import { SanityService } from '../../services/SanityService.js';
 
 export class CvProjects extends BaseComponent {
-    connectedCallback() {
-        this.bindState('cv', () => this.#render());
-        this.#render();
+    async connectedCallback() {
+        this.#renderSkeleton();
+        try {
+            const projects = await SanityService.fetch('*[_type == "project"]');
+            this.#render(projects);
+        } catch (error) {
+            console.error('Failed to fetch projects:', error);
+            this.#render([]);
+        }
     }
 
-    #render() {
-        const cv = store.state.cv;
-        const items = Array.isArray(cv?.projects) ? cv.projects : [];
+    #renderSkeleton() {
+        this.render(`
+            <style>
+                :host { display: block; }
+                section { scroll-margin-top: 96px; }
+                .skeleton {
+                    background: var(--surface-2);
+                    height: 440px;
+                    border-radius: var(--radius);
+                    animation: pulse 1.5s infinite;
+                    border: 1px solid var(--glass-border);
+                }
+                @keyframes pulse {
+                    0% { opacity: 0.6; }
+                    50% { opacity: 0.3; }
+                    100% { opacity: 0.6; }
+                }
+            </style>
+            <section id="projects">
+                <div class="skeleton"></div>
+            </section>
+        `);
+    }
+
+    #render(items = []) {
 
         this.render(`
             <style>
@@ -187,24 +215,30 @@ export class CvProjects extends BaseComponent {
                     </div>
 
                     <div class="accordion">
-                        ${items.length ? items.map((p, index) => `
-                            <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
-                                <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
-                                <div class="card-bg"></div>
-                                <div class="card-content">
-                                    <h3>${p.name ?? 'Project'}</h3>
-                                    <p>${p.description ?? ''}</p>
-                                    ${Array.isArray(p.stack) && p.stack.length ? `
-                                        <div class="stack">
-                                            ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
+                        ${items.length ? items.map((p, index) => {
+                            const title = p.title || p.name || 'Project';
+                            const imageUrl = p.mainImage ? SanityService.urlFor(p.mainImage).width(400).url() : null;
+                            const bgStyle = imageUrl ? `style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"` : '';
+
+                            return `
+                                <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
+                                    <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
+                                    <div class="card-bg" ${bgStyle}></div>
+                                    <div class="card-content">
+                                        <h3>${title}</h3>
+                                        <p>${p.description ?? ''}</p>
+                                        ${Array.isArray(p.stack) && p.stack.length ? `
+                                            <div class="stack">
+                                                ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
+                                            </div>
+                                        ` : ''}
+                                        <div class="links">
+                                            ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
                                         </div>
-                                    ` : ''}
-                                    <div class="links">
-                                        ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
                                     </div>
                                 </div>
-                            </div>
-                        `).join('') : `
+                            `;
+                        }).join('') : `
                             <div class="project-card active">
                                 <div class="card-label">PROTO.SITE</div>
                                 <div class="card-bg"></div>
