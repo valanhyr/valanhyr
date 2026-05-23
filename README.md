@@ -34,12 +34,24 @@ This project is a showcase of "Pragmatic Modernity." It rejects the overhead of 
 └── docs/                 # Architectural Decision Records (ADRs) & Specs
 ```
 
+## 🔌 Switching to real Sanity
+
+By default the app runs offline using `src/store/cv.json` (via a Mock Sanity service).
+
+To read from a real Sanity project:
+
+1. Ensure your dataset is readable from the browser (public dataset + CORS allowed for your domain/localhost).
+2. In `index.html`, define `window.__SANITY__` **before** `main.js` (see the commented example).
+
+Notes:
+- Don’t ship Sanity tokens in a static site. If you need private reads, put a tiny backend/proxy in front.
+
 ## 🧪 Testing
 
 The project prioritizes verification. Run the full test suite with:
 
 ```bash
-node --test tests/components/*.test.js
+node --test tests/**/*.test.js
 ```
 
 ## 📜 License

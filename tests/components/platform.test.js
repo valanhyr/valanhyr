@@ -18,22 +18,21 @@ global.customElements = {
 
 async function runTest() {
     try {
-        const { store } = await import('../../src/store/state.js');
+        const { SanityService } = await import('../../src/services/SanityService.js');
         const { CvPlatform } = await import('../../src/components/sections/CvPlatform.js');
 
         if (!global.customElements.registry['cv-platform']) {
             throw new Error('cv-platform not registered');
         }
 
-        store.state.cv = {
-            platform: {
-                title: 'Platform & Architecture',
-                bullets: ['A', 'B', 'C']
-            }
-        };
+        // Keep this test deterministic: don't depend on cv.json.
+        SanityService.fetch = async () => ([{
+            title: 'Platform & Architecture',
+            bullets: ['A', 'B', 'C']
+        }]);
 
         const section = new CvPlatform();
-        section.connectedCallback();
+        await section.connectedCallback();
 
         const html = section.shadowRoot.innerHTML;
         if (!html.includes('Platform & Architecture')) throw new Error('CvPlatform did not render title');
