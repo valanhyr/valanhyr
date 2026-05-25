@@ -143,13 +143,14 @@ export class ParticleGraph extends BaseComponent {
         this.#start();
     }
 
-    #drawGrid() {
+    #drawGrid(isLight) {
         const ctx = this._ctx;
         const spacing = 60;
         const offset = (this._pulseT * 10) % spacing;
 
         ctx.save();
-        ctx.strokeStyle = 'rgba(0, 255, 204, 0.03)';
+        const base = isLight ? '0,0,0' : '255,255,255';
+        ctx.strokeStyle = `rgba(${base},${isLight ? 0.04 : 0.03})`;
         ctx.lineWidth = 1;
 
         // Vertical lines
@@ -493,20 +494,26 @@ export class ParticleGraph extends BaseComponent {
         }
 
         // Grid stays always-on but extremely subtle
-        this.#drawGrid();
+        this.#drawGrid(isLight);
 
-        // Blending logic: 'lighter' works for dark, 'source-over' for light.
-        ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
+        const accentRaw = styles.getPropertyValue('--primary').trim() || '#00ffcc';
+        const accent = parseCssColor(accentRaw) || { r: 0, g: 255, b: 204, a: 1 };
 
         // Hovered parent (used to highlight its links)
         const hovered = this._nodes.find(n => n.depth === 1 && n.id === this._hoveredGroupId);
-
-        // Edges
-        const highlighted = [];
         const hoverIntensity = hovered ? (hovered._hoverT ?? 0) : 0;
+
+        // Spec range: dimRest.factor 0.20–0.40. Use 0.30 as default.
+        const dimRestAtFull = 0.30;
+        const dimK = 1 - (1 - dimRestAtFull) * hoverIntensity;
+
         const pulse = 0.5 + 0.5 * Math.sin((this._pulseT ?? 0) * 2 * Math.PI * 0.75);
         const pulseK = 0.20 + 0.80 * pulse;
 
+        ctx.globalCompositeOperation = 'source-over';
+
+        // Edges (idle/neutral)
+        const highlighted = [];
         for (const e of this._edges) {
             const dx = e.a.x - e.b.x;
             const dy = e.a.y - e.b.y;
@@ -520,7 +527,7 @@ export class ParticleGraph extends BaseComponent {
                 !isGroupLink &&
                 e.kind === 'tree' &&
                 e.groupKey &&
-                hovered.groupKey &&
+                hovered?.groupKey &&
                 e.groupKey === hovered.groupKey
             );
 
@@ -531,21 +538,17 @@ export class ParticleGraph extends BaseComponent {
 
             const baseAlpha = isGroupLink ? 0.35 : clamp(0.30 - (depth - 1) * 0.05, 0.10, 0.30);
             let alpha = clamp(baseAlpha - dist / 800, 0.05, isGroupLink ? 0.35 : 0.25);
-            
-            // Adjust alpha for light mode
+
             if (isLight) alpha = clamp(alpha * 1.5, 0.1, 0.5);
+
+            // Dim non-focused items when hovering/focusing a group
+            alpha *= dimK;
 
             if (alpha <= 0.01) continue;
 
-            const grad = ctx.createLinearGradient(e.a.x, e.a.y, e.b.x, e.b.y);
-            const cA = e.a.groupRgb || { r: 255, g: 255, b: 255 };
-            const cB = e.b.groupRgb || { r: 255, g: 255, b: 255 };
-
-            grad.addColorStop(0, `rgba(${cA.r},${cA.g},${cA.b},${alpha})`);
-            grad.addColorStop(1, `rgba(${cB.r},${cB.g},${cB.b},${alpha})`);
-
+            const base = isLight ? '0,0,0' : '255,255,255';
             ctx.lineWidth = isGroupLink ? 1.8 : clamp(1.2 - (depth - 2) * 0.15, 0.6, 1.2);
-            ctx.strokeStyle = grad;
+            ctx.strokeStyle = `rgba(${base},${alpha})`;
 
             ctx.beginPath();
             ctx.moveTo(e.a.x, e.a.y);
@@ -553,31 +556,7 @@ export class ParticleGraph extends BaseComponent {
             ctx.stroke();
         }
 
-        // Draw highlighted edges
-        for (const { e, dist, depth } of highlighted) {
-            const isDirectChildLink = Boolean(e.a && hovered && e.a.id === hovered.id);
-            const baseAlpha = clamp(0.4 - (depth - 1) * 0.05, 0.15, 0.4);
-            let alpha = clamp(baseAlpha - dist / 800, 0.1, 0.4);
-
-            const boost = (isDirectChildLink ? 0.5 : 0.25) * hoverIntensity * pulseK;
-            alpha = clamp(alpha + boost, 0.1, 0.9);
-
-            const grad = ctx.createLinearGradient(e.a.x, e.a.y, e.b.x, e.b.y);
-            const hlRgb = hovered?.groupRgb || { r: 255, g: 255, b: 255 };
-            grad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${alpha})`);
-            grad.addColorStop(1, isLight ? `rgba(0,0,0,${alpha * 0.15})` : `rgba(255,255,255,${alpha * 0.5})`);
-
-            const baseWidth = clamp(1.4 - (depth - 2) * 0.15, 0.8, 1.4);
-            ctx.lineWidth = baseWidth + (isDirectChildLink ? 1.5 : 0.5) * hoverIntensity * pulseK;
-            ctx.strokeStyle = grad;
-
-            ctx.beginPath();
-            ctx.moveTo(e.a.x, e.a.y);
-            ctx.lineTo(e.b.x, e.b.y);
-            ctx.stroke();
-        }
-
-        // Nodes
+        // Nodes (idle/neutral)
         const highlightedNodes = [];
         for (const n of this._nodes) {
             if (hovered && n === hovered) continue;
@@ -596,18 +575,15 @@ export class ParticleGraph extends BaseComponent {
                 continue;
             }
 
+            const tDepth = clamp((n.depth - 1) / 5, 0, 1);
+            const baseAlpha = clamp((n.alpha ?? 0.85) * (n.depth === 1 ? 0.55 : 0.40) * (1 - tDepth * 0.35), 0.04, 0.9);
+            const a0 = baseAlpha * dimK;
+            if (a0 <= 0.01) continue;
+
+            const core = isLight ? '0,0,0' : '255,255,255';
             const radGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
-            const rgb = n.rgb || { r: 255, g: 255, b: 255 };
-            
-            if (isLight) {
-                // Darker cores for visibility
-                radGrad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},${n.alpha})`);
-                radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
-            } else {
-                radGrad.addColorStop(0, `rgba(255,255,255,${n.alpha})`);
-                radGrad.addColorStop(0.4, `rgba(${rgb.r},${rgb.g},${rgb.b},${n.alpha * 0.8})`);
-                radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
-            }
+            radGrad.addColorStop(0, `rgba(${core},${a0})`);
+            radGrad.addColorStop(1, `rgba(${core},0)`);
 
             ctx.beginPath();
             ctx.fillStyle = radGrad;
@@ -615,29 +591,69 @@ export class ParticleGraph extends BaseComponent {
             ctx.fill();
         }
 
+        // Dim/veil overlay (decided: yes)
+        if (hoverIntensity > 0) {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = isLight
+                ? `rgba(255,255,255,${0.10 * hoverIntensity})`
+                : `rgba(0,0,0,${0.10 * hoverIntensity})`;
+            ctx.fillRect(0, 0, this._w, this._h);
+        }
+
+        // Accent-only highlight pass
+        if (highlighted.length) {
+            ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
+
+            for (const { e, dist, depth } of highlighted) {
+                const isDirectChildLink = Boolean(e.a && hovered && e.a.id === hovered.id);
+                const baseAlpha = clamp(0.4 - (depth - 1) * 0.05, 0.15, 0.4);
+                let alpha = clamp(baseAlpha - dist / 800, 0.1, 0.4);
+
+                const boost = (isDirectChildLink ? 0.5 : 0.25) * hoverIntensity * pulseK;
+                alpha = clamp(alpha + boost, 0.1, 0.85);
+
+                const grad = ctx.createLinearGradient(e.a.x, e.a.y, e.b.x, e.b.y);
+                grad.addColorStop(0, `rgba(${accent.r},${accent.g},${accent.b},${alpha})`);
+                grad.addColorStop(1, isLight
+                    ? `rgba(0,0,0,${alpha * 0.12})`
+                    : `rgba(255,255,255,${alpha * 0.45})`
+                );
+
+                const baseWidth = clamp(1.4 - (depth - 2) * 0.15, 0.8, 1.4);
+                const lw = clamp(baseWidth + (isDirectChildLink ? 1.5 : 0.5) * hoverIntensity * pulseK, baseWidth, 3.5);
+
+                ctx.lineWidth = lw;
+                ctx.strokeStyle = grad;
+
+                ctx.beginPath();
+                ctx.moveTo(e.a.x, e.a.y);
+                ctx.lineTo(e.b.x, e.b.y);
+                ctx.stroke();
+            }
+        }
+
         // Draw highlighted children
         if (highlightedNodes.length) {
-            const hlRgb = hovered?.groupRgb || { r: 255, g: 255, b: 255 };
+            ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
+
             for (const n of highlightedNodes) {
-                const tDepth = clamp((n.depth - 1) / 5, 0, 1);
-                const rgb = mixRgb(hlRgb, { r: 255, g: 255, b: 255 }, 0.2 + tDepth * 0.4);
                 const a = clamp(0.2 + 0.7 * hoverIntensity * pulseK, 0.2, 0.95);
                 const rr = n.r * (1 + 0.2 * hoverIntensity * pulseK);
 
                 const radGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, rr * 1.5);
-                
+
                 if (isLight) {
-                    radGrad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${a})`);
-                    radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0)`);
+                    radGrad.addColorStop(0, `rgba(${accent.r},${accent.g},${accent.b},${a})`);
+                    radGrad.addColorStop(1, `rgba(${accent.r},${accent.g},${accent.b},0)`);
                 } else {
-                    radGrad.addColorStop(0, `rgba(255,255,255,${a})`);
-                    radGrad.addColorStop(0.3, `rgba(${rgb.r},${rgb.g},${rgb.b},${a * 0.8})`);
-                    radGrad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
+                    radGrad.addColorStop(0, `rgba(255,255,255,${a * 0.65})`);
+                    radGrad.addColorStop(0.25, `rgba(${accent.r},${accent.g},${accent.b},${a})`);
+                    radGrad.addColorStop(1, `rgba(${accent.r},${accent.g},${accent.b},0)`);
                 }
 
                 ctx.save();
-                ctx.shadowColor = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${isLight ? 0.15 : 0.4})`;
-                ctx.shadowBlur = (isLight ? 4 : 15) * hoverIntensity * pulseK;
+                ctx.shadowColor = `rgba(${accent.r},${accent.g},${accent.b},${isLight ? 0.15 : 0.4})`;
+                ctx.shadowBlur = clamp((isLight ? 4 : 15) * hoverIntensity * pulseK, 0, 28);
                 ctx.beginPath();
                 ctx.fillStyle = radGrad;
                 ctx.arc(n.x, n.y, rr * 1.8, 0, Math.PI * 2);
@@ -648,23 +664,24 @@ export class ParticleGraph extends BaseComponent {
 
         // Hovered parent
         if (hovered) {
+            ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
+
             const t = hovered._hoverT ?? 0;
             const r = hovered.r * (1 + t * (this._hoverScale - 1));
-            const hlRgb = hovered.groupRgb || { r: 255, g: 255, b: 255 };
 
             ctx.save();
-            ctx.shadowColor = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${isLight ? 0.25 : 0.6})`;
-            ctx.shadowBlur = (isLight ? 10 : 30) * t;
+            ctx.shadowColor = `rgba(${accent.r},${accent.g},${accent.b},${isLight ? 0.25 : 0.6})`;
+            ctx.shadowBlur = clamp((isLight ? 10 : 30) * t, 0, 32);
 
             const radGrad = ctx.createRadialGradient(hovered.x, hovered.y, 0, hovered.x, hovered.y, r);
-            
+
             if (isLight) {
-                radGrad.addColorStop(0, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},1)`);
-                radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0.3)`);
+                radGrad.addColorStop(0, `rgba(${accent.r},${accent.g},${accent.b},1)`);
+                radGrad.addColorStop(1, `rgba(${accent.r},${accent.g},${accent.b},0.25)`);
             } else {
                 radGrad.addColorStop(0, '#fff');
-                radGrad.addColorStop(0.2, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},1)`);
-                radGrad.addColorStop(1, `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},0)`);
+                radGrad.addColorStop(0.2, `rgba(${accent.r},${accent.g},${accent.b},1)`);
+                radGrad.addColorStop(1, `rgba(${accent.r},${accent.g},${accent.b},0)`);
             }
 
             ctx.beginPath();
@@ -675,7 +692,7 @@ export class ParticleGraph extends BaseComponent {
             // Technical Ring
             ctx.shadowBlur = 0;
             ctx.lineWidth = 2;
-            ctx.strokeStyle = `rgba(${hlRgb.r},${hlRgb.g},${hlRgb.b},${0.8 * t})`;
+            ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${0.8 * t})`;
             ctx.setLineDash([5, 5]);
             ctx.beginPath();
             ctx.arc(hovered.x, hovered.y, r * 1.4, this._pulseT * 2, this._pulseT * 2 + Math.PI * 1.5);
@@ -687,7 +704,7 @@ export class ParticleGraph extends BaseComponent {
             ctx.textBaseline = 'middle';
             ctx.font = '900 13px "JetBrains Mono", monospace';
 
-            const lum = luminance(hlRgb);
+            const lum = luminance(accent);
             const isDarkText = lum > 0.6;
 
             ctx.fillStyle = isLight ? (isDarkText ? '#000' : '#fff') : (isDarkText ? 'rgba(0,0,0,0.85)' : '#fff');
@@ -710,7 +727,12 @@ export class ParticleGraph extends BaseComponent {
             if (n.depth === 1 && n.id === this._hoveredGroupId) continue;
             const fontSize = clamp(11 - (n.depth - 1) * 1.2, 8, 11);
             ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
-            const labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
+            let labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
+
+            if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
+                labelAlpha *= dimK;
+            }
+
             ctx.fillStyle = `${labelPrefix}${labelAlpha})`;
             ctx.fillText(n.label, n.x + n.r + 6, n.y - n.r - 2);
         }
