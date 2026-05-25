@@ -71,6 +71,12 @@ export class ParticleGraph extends BaseComponent {
         this._needsHardClear = true;
         this._lastBgRaw = null;
 
+        // Pause/visibility support
+        this._isIntersecting = true;
+        this._isDocVisible = true;
+        this._io = null;
+        this._onVisibilityChange = null;
+
         // Hover interaction (only for parent/group nodes for now)
         this._hoveredGroupId = null;
         this._hoverScale = 5.0; // 5x size on hover
@@ -132,6 +138,22 @@ export class ParticleGraph extends BaseComponent {
 
         this.bindState('cv', () => this.#initGraph());
 
+        this._isDocVisible = typeof document !== 'undefined' ? !document.hidden : true;
+        this._onVisibilityChange = () => {
+            this._isDocVisible = !document.hidden;
+        };
+        if (typeof document !== 'undefined' && document.addEventListener) {
+            document.addEventListener('visibilitychange', this._onVisibilityChange);
+        }
+
+        if (typeof IntersectionObserver !== 'undefined') {
+            this._io = new IntersectionObserver((entries) => {
+                // Any intersecting entry means the component is on screen enough to animate
+                this._isIntersecting = entries.some(e => e.isIntersecting);
+            }, { threshold: 0.01 });
+            this._io.observe(this);
+        }
+
         // Initial sizing can be 0x0 before layout; retry once on the next animation frame.
         this.#resize();
         this.#initGraph();
@@ -175,6 +197,14 @@ export class ParticleGraph extends BaseComponent {
         if (this._ro) this._ro.disconnect();
         if (this._raf) cancelAnimationFrame(this._raf);
         this._raf = null;
+
+        if (this._io) this._io.disconnect();
+        this._io = null;
+
+        if (this._onVisibilityChange && typeof document !== 'undefined' && document.removeEventListener) {
+            document.removeEventListener('visibilitychange', this._onVisibilityChange);
+        }
+        this._onVisibilityChange = null;
 
         if (this._canvas && this._onMouseMove) this._canvas.removeEventListener('mousemove', this._onMouseMove);
         if (this._canvas && this._onMouseLeave) this._canvas.removeEventListener('mouseleave', this._onMouseLeave);
@@ -418,6 +448,12 @@ export class ParticleGraph extends BaseComponent {
         const loop = (t) => {
             const dt = clamp((t - this._lastT) / 1000, 0, 0.05);
             this._lastT = t;
+
+            if (!this._isDocVisible || !this._isIntersecting) {
+                this._raf = requestAnimationFrame(loop);
+                return;
+            }
+
             this.#step(dt);
             this.#draw();
             this._raf = requestAnimationFrame(loop);

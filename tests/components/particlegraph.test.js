@@ -17,6 +17,9 @@ test('ParticleGraph Component (smoke)', async (t) => {
     global.getComputedStyle = () => ({
       getPropertyValue: (k) => (k === '--bg' ? '#08080c' : '')
     });
+    global.document.hidden = false;
+    global.document.addEventListener = () => {};
+    global.document.removeEventListener = () => {};
     global.performance = { now: () => 0 };
     global.requestAnimationFrame = () => 1;
     global.cancelAnimationFrame = () => {};
