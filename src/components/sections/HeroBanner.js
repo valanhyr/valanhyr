@@ -70,6 +70,17 @@ export class HeroBanner extends BaseComponent {
                     text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
                     max-width: 100%;
                     min-width: 0;
+                    position: relative;
+                }
+
+                /* Hidden copy for measuring the real headline width (doesn't affect layout). */
+                .typewriter-measure {
+                    position: absolute;
+                    inset: 0 auto auto 0;
+                    visibility: hidden;
+                    pointer-events: none;
+                    white-space: nowrap;
+                    padding-right: 0.1em;
                 }
 
                 /* If a long headline would overflow, tighten the scale a bit on desktop. */
@@ -181,7 +192,10 @@ export class HeroBanner extends BaseComponent {
                         <ui-tag>${location}</ui-tag>
                     </div>
 
-                    <h1><span class="typewriter">${headline}</span></h1>
+                    <h1>
+                        <span class="typewriter">${headline}</span>
+                        <span class="typewriter-measure" aria-hidden="true">${headline}</span>
+                    </h1>
                     <p>${subheadline}</p>
                     ${proofs.length ? `
   <ul class="proofs">
@@ -208,7 +222,8 @@ export class HeroBanner extends BaseComponent {
 
                 const h1 = sr.querySelector('h1');
                 const tw = sr.querySelector('.typewriter');
-                if (!h1 || !tw || !tw.classList || !h1.classList) return;
+                const measure = sr.querySelector('.typewriter-measure');
+                if (!h1 || !tw || !tw.classList || !h1.classList || !measure) return;
 
                 const getH1Width = () => (typeof h1.getBoundingClientRect === 'function'
                     ? h1.getBoundingClientRect().width
@@ -216,19 +231,16 @@ export class HeroBanner extends BaseComponent {
 
                 const overflows = () => {
                     const w = getH1Width();
-                    return w ? (tw.scrollWidth > w + 1) : false;
+                    const textW = measure.scrollWidth;
+                    return w ? (textW > w + 1) : false;
                 };
 
                 tw.classList.remove('is-wrapping');
                 h1.classList.remove('is-tight', 'is-tighter');
 
                 // Try keeping a single-line typewriter by tightening scale a bit.
-                if (overflows()) {
-                    h1.classList.add('is-tight');
-                }
-                if (overflows()) {
-                    h1.classList.add('is-tighter');
-                }
+                if (overflows()) h1.classList.add('is-tight');
+                if (overflows()) h1.classList.add('is-tighter');
 
                 // If it still doesn't fit, fall back to wrapping (no animation).
                 if (overflows()) {
