@@ -9,7 +9,7 @@ Elevate the `ParticleGraph` (hero background) to feel more “cyber-organic” a
 - Vanilla site: no frameworks, no bundler/build step.
 - Keep runtime dependencies at zero.
 - Must support `prefers-reduced-motion`.
-- Performance target: **Balanced** (medium blur, very subtle trails).
+- Performance target: **Balanced** (medium blur; avoid heavy effects in idle).
 - Visual rule: **neon is an accent** (primarily on hover/focus), idle state stays sober.
 
 ## Decisions
@@ -22,6 +22,7 @@ Elevate the `ParticleGraph` (hero background) to feel more “cyber-organic” a
 ### 2) Color strategy
 Chosen direction: **Neon only as accent (hover/focus)**.
 - Idle: mostly white/gray particles and edges.
+- Idle labels: group/parent labels may use a **soft `--primary` tint** to improve hierarchy, but avoid glow/blur. Use a background-colored outline (e.g., `strokeText` with `--bg`) to keep text crisp.
 - Focus: use the theme accent (`--primary`, mint/cyan) for glow and highlight.
 - Group palette may remain available for future iterations, but is not the default visual driver.
 
@@ -30,14 +31,14 @@ Chosen direction: **Neon only as accent (hover/focus)**.
 - Light/dark behavior is derived from the actual `--bg` color, not string heuristics.
 
 ### 4) Motion trails (ghosting)
-- Enabled in Balanced mode.
-- Implementation concept: instead of `clearRect()`, paint the background color each frame with a small alpha to leave a short trail.
-- Must reset/clear hard on resize/theme changes to avoid smearing artifacts.
+- **Disabled by default** after tuning for clarity: trails made text/lines/nodes look blurry.
+- Baseline approach: paint the background opaquely each frame to keep rendering crisp.
+- (Optional future knob) Trails can be reintroduced as a configurable mode if needed.
 
 ### 5) Suggested defaults (tuning knobs)
 These are starting points; they can be tweaked after eyeballing FPS and readability.
 - `grid.alpha`: 0.02–0.04
-- `trails.alpha`: 0.06–0.12 (higher = shorter trails)
+- (If trails return) `trails.alpha`: 0.06–0.12 (higher = shorter trails)
 - `dimRest.factor`: 0.20–0.40 (lower = stronger dim)
 - `shadowBlur.max`: ~18–28 (apply only on accent pass)
 
