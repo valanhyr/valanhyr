@@ -67,10 +67,6 @@ export class ParticleGraph extends BaseComponent {
         this._ctx = null;
         this._ro = null;
 
-        // Trails (ghosting) support
-        this._needsHardClear = true;
-        this._lastBgRaw = null;
-
         // Pause/visibility support
         this._isIntersecting = true;
         this._isDocVisible = true;
@@ -256,8 +252,6 @@ export class ParticleGraph extends BaseComponent {
         this._canvas.height = Math.floor(this._h * this._dpr);
 
         this._ctx.setTransform(this._dpr, 0, 0, this._dpr, 0, 0);
-
-        this._needsHardClear = true;
     }
 
     #initGraph() {
@@ -504,30 +498,16 @@ export class ParticleGraph extends BaseComponent {
         const ctx = this._ctx;
         if (!ctx) return;
 
-        // Background + trails (balanced)
+        // Background (no trails: keep text/lines crisp)
         const styles = getComputedStyle(this);
         const bgRaw = styles.getPropertyValue('--bg').trim() || '#08080c';
         const bgParsed = parseCssColor(bgRaw);
         const isLight = bgParsed ? isLightColor(bgParsed) : false;
 
-        // Higher alpha = shorter trails. (Spec: 0.06–0.12)
-        const trailsAlpha = isLight ? 0.10 : 0.08;
-
         ctx.globalCompositeOperation = 'source-over';
-
-        // Hard clear on resize or theme/bg change
-        if (this._needsHardClear || this._lastBgRaw !== bgRaw) {
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = bgRaw;
-            ctx.fillRect(0, 0, this._w, this._h);
-            this._needsHardClear = false;
-            this._lastBgRaw = bgRaw;
-        } else {
-            ctx.globalAlpha = trailsAlpha;
-            ctx.fillStyle = bgRaw;
-            ctx.fillRect(0, 0, this._w, this._h);
-            ctx.globalAlpha = 1;
-        }
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = bgRaw;
+        ctx.fillRect(0, 0, this._w, this._h);
 
         // Grid stays always-on but extremely subtle
         this.#drawGrid(isLight);
