@@ -44,16 +44,16 @@ async function runTest() {
         for (const p of ['Proof 1', 'Proof 2', 'Proof 3']) {
             if (!html.includes(p)) throw new Error('HeroBanner did not render proofs');
         }
-        if (html.includes('border-radius: var(--radius-lg)')) {
+        if (/border-radius\s*:\s*var\(--radius-lg\)/.test(html)) {
             throw new Error('HeroBanner still includes card border radius');
         }
-        if (html.includes('box-shadow:')) {
+        if (/box-shadow\s*:/.test(html)) {
             throw new Error('HeroBanner still includes box shadow');
         }
-        if (html.includes('border: 1px solid')) {
+        if (/border\s*:\s*1px\s+solid/.test(html)) {
             throw new Error('HeroBanner still includes border');
         }
-        if (!html.includes('.stage::after')) {
+        if (!/\.stage::after\s*\{/.test(html)) {
             throw new Error('HeroBanner is missing stage ::after');
         }
 

@@ -46,6 +46,20 @@ export class HeroBanner extends BaseComponent {
                         radial-gradient(
                             120% 120% at 50% 50%,
                             transparent 0%,
+                            transparent 60%,
+                            var(--bg) 100%
+                        ),
+                        linear-gradient(
+                            to bottom,
+                            var(--bg) 0%,
+                            transparent 14%,
+                            transparent 86%,
+                            var(--bg) 100%
+                        );
+                    background:
+                        radial-gradient(
+                            120% 120% at 50% 50%,
+                            transparent 0%,
                             transparent 55%,
                             color-mix(in srgb, var(--bg) 85%, transparent) 78%,
                             var(--bg) 100%
