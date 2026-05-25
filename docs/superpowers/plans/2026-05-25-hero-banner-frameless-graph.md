@@ -30,8 +30,6 @@ Run:
 ```powershell
 node .\tests\components\navbar.test.js
 node .\tests\components\homeview.test.js
-node .\tests\components\particlegraph-color.test.js
-node .\tests\components\particlegraph.test.js
 node .\tests\components\herobanner.test.js
 ```
 
@@ -155,8 +153,6 @@ Run:
 ```powershell
 node .\tests\components\navbar.test.js
 node .\tests\components\homeview.test.js
-node .\tests\components\particlegraph-color.test.js
-node .\tests\components\particlegraph.test.js
 node .\tests\components\herobanner.test.js
 ```
 
