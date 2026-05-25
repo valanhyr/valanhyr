@@ -738,11 +738,37 @@ export class ParticleGraph extends BaseComponent {
         ctx.textBaseline = 'top';
         ctx.textAlign = 'left';
         const labelPrefix = isLight ? 'rgba(0,0,0,' : 'rgba(255,255,255,';
+        const bgSolid = bgParsed || (isLight ? { r: 245, g: 245, b: 247 } : { r: 8, g: 8, b: 12 });
 
         for (const n of this._nodes) {
             if (n.depth === 1 && n.id === this._hoveredGroupId) continue;
-            const fontSize = clamp(11 - (n.depth - 1) * 1.2, 8, 11);
+
+            const isParent = n.depth === 1;
+            const fontSize = isParent ? 12 : clamp(11 - (n.depth - 1) * 1.2, 8, 11);
             ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
+
+            if (isParent) {
+                let a = isLight ? 0.70 : 0.60;
+                if (hovered && n.id === hovered.id) a = 0.98;
+
+                if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
+                    a *= dimK;
+                }
+
+                if (a <= 0.01) continue;
+
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = `rgba(${bgSolid.r},${bgSolid.g},${bgSolid.b},${clamp(0.85 * a, 0.2, 0.95)})`;
+                ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${a})`;
+
+                const x = n.x + n.r + 6;
+                const y = n.y - n.r - 2;
+                ctx.strokeText(n.label, x, y);
+                ctx.fillText(n.label, x, y);
+                continue;
+            }
+
             let labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
 
             if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {

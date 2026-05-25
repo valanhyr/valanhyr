@@ -41,6 +41,7 @@ test('ParticleGraph Component (smoke)', async (t) => {
       restore() {},
       setLineDash() {},
       fillText() {},
+      strokeText() {},
       createLinearGradient: () => ({ addColorStop() {} }),
       createRadialGradient: () => ({ addColorStop() {} })
     };
