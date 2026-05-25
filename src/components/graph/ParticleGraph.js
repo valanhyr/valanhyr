@@ -293,7 +293,7 @@ export class ParticleGraph extends BaseComponent {
         const addNode = ({ id, label, depth, kind, groupKey }) => {
             // Depth-based visual scaling for "depth" / hierarchy.
             const baseR = depth === 1
-                ? 8.4
+                ? 10.8
                 : clamp(6.2 - (depth - 2) * 1.15 + rand(-0.4, 0.6), 2.6, 6.0);
 
             const r = baseR;
@@ -718,16 +718,16 @@ export class ParticleGraph extends BaseComponent {
             // Labels for hovered
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.font = '900 13px "JetBrains Mono", monospace';
+            ctx.font = '900 15px "JetBrains Mono", monospace';
 
             const lum = luminance(accent);
             const isDarkText = lum > 0.6;
 
             ctx.fillStyle = isLight ? (isDarkText ? '#000' : '#fff') : (isDarkText ? 'rgba(0,0,0,0.85)' : '#fff');
-            ctx.fillText(hovered.label, hovered.x, hovered.y - 12);
+            ctx.fillText(hovered.label, hovered.x, hovered.y - 14);
 
             if (hovered.hoverInfo) {
-                ctx.font = '700 10px "JetBrains Mono", monospace';
+                ctx.font = '700 11px "JetBrains Mono", monospace';
                 ctx.fillStyle = isLight ? (isDarkText ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)') : (isDarkText ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)');
                 ctx.fillText(hovered.hoverInfo, hovered.x, hovered.y + 14);
             }
