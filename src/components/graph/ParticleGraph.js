@@ -1,5 +1,6 @@
 import { BaseComponent } from '../BaseComponent.js';
 import { store } from '../../store/state.js';
+import { parseCssColor, isLightColor } from './particleGraphColor.js';
 
 function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
@@ -464,10 +465,11 @@ export class ParticleGraph extends BaseComponent {
 
         // Background
         const styles = getComputedStyle(this);
-        const bgColor = styles.getPropertyValue('--bg').trim() || '#08080c';
-        const isLight = styles.getPropertyValue('--bg').includes('#f') || styles.getPropertyValue('--bg').includes('245');
+        const bgRaw = styles.getPropertyValue('--bg').trim() || '#08080c';
+        const bgParsed = parseCssColor(bgRaw);
+        const isLight = bgParsed ? isLightColor(bgParsed) : false;
 
-        ctx.fillStyle = bgColor;
+        ctx.fillStyle = bgRaw;
         ctx.fillRect(0, 0, this._w, this._h);
 
         this.#drawGrid();
