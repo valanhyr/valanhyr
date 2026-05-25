@@ -678,7 +678,58 @@ export class ParticleGraph extends BaseComponent {
             }
         }
 
-        // Hovered parent
+        // General Labels
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.textBaseline = 'top';
+        ctx.textAlign = 'left';
+        const labelPrefix = isLight ? 'rgba(0,0,0,' : 'rgba(255,255,255,';
+        const bgSolid = bgParsed || (isLight ? { r: 245, g: 245, b: 247 } : { r: 8, g: 8, b: 12 });
+
+        // Draw non-parent labels first
+        const parentLabels = [];
+        for (const n of this._nodes) {
+            if (n.depth === 1) {
+                if (n.id === this._hoveredGroupId) continue;
+                parentLabels.push(n);
+                continue;
+            }
+
+            const fontSize = clamp(11 - (n.depth - 1) * 1.2, 8, 11);
+            ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
+
+            let labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
+            if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
+                labelAlpha *= dimK;
+            }
+
+            ctx.fillStyle = `${labelPrefix}${labelAlpha})`;
+            ctx.fillText(n.label, n.x + n.r + 6, n.y - n.r - 2);
+        }
+
+        // Then draw parent labels on top
+        ctx.font = `700 12px "JetBrains Mono", monospace`;
+        for (const n of parentLabels) {
+            let a = isLight ? 0.70 : 0.60;
+            if (hovered && n.id === hovered.id) a = 0.98;
+
+            if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
+                a *= dimK;
+            }
+
+            if (a <= 0.01) continue;
+
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = `rgba(${bgSolid.r},${bgSolid.g},${bgSolid.b},${clamp(0.85 * a, 0.2, 0.95)})`;
+            ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${a})`;
+
+            const x = n.x + n.r + 6;
+            const y = n.y - n.r - 2;
+            ctx.strokeText(n.label, x, y);
+            ctx.fillText(n.label, x, y);
+        }
+
+        // Hovered parent (draw last so nothing covers it)
         if (hovered) {
             ctx.globalCompositeOperation = isLight ? 'source-over' : 'lighter';
 
@@ -715,68 +766,28 @@ export class ParticleGraph extends BaseComponent {
             ctx.stroke();
             ctx.restore();
 
-            // Labels for hovered
+            // Labels for hovered (outlined for clarity)
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.font = '900 15px "JetBrains Mono", monospace';
 
-            const lum = luminance(accent);
-            const isDarkText = lum > 0.6;
+            const a = 1;
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = `rgba(${bgSolid.r},${bgSolid.g},${bgSolid.b},${0.85})`;
+            ctx.fillStyle = isLight ? `rgba(${accent.r},${accent.g},${accent.b},${a})` : '#fff';
 
-            ctx.fillStyle = isLight ? (isDarkText ? '#000' : '#fff') : (isDarkText ? 'rgba(0,0,0,0.85)' : '#fff');
+            ctx.strokeText(hovered.label, hovered.x, hovered.y - 14);
             ctx.fillText(hovered.label, hovered.x, hovered.y - 14);
 
             if (hovered.hoverInfo) {
                 ctx.font = '700 11px "JetBrains Mono", monospace';
-                ctx.fillStyle = isLight ? (isDarkText ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)') : (isDarkText ? 'rgba(0,0,0,0.65)' : 'rgba(255,255,255,0.7)');
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = `rgba(${bgSolid.r},${bgSolid.g},${bgSolid.b},${0.8})`;
+                ctx.fillStyle = isLight ? 'rgba(0,0,0,0.75)' : 'rgba(255,255,255,0.75)';
+                ctx.strokeText(hovered.hoverInfo, hovered.x, hovered.y + 14);
                 ctx.fillText(hovered.hoverInfo, hovered.x, hovered.y + 14);
             }
-        }
-
-        // General Labels
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.textBaseline = 'top';
-        ctx.textAlign = 'left';
-        const labelPrefix = isLight ? 'rgba(0,0,0,' : 'rgba(255,255,255,';
-        const bgSolid = bgParsed || (isLight ? { r: 245, g: 245, b: 247 } : { r: 8, g: 8, b: 12 });
-
-        for (const n of this._nodes) {
-            if (n.depth === 1 && n.id === this._hoveredGroupId) continue;
-
-            const isParent = n.depth === 1;
-            const fontSize = isParent ? 12 : clamp(11 - (n.depth - 1) * 1.2, 8, 11);
-            ctx.font = `700 ${fontSize}px "JetBrains Mono", monospace`;
-
-            if (isParent) {
-                let a = isLight ? 0.70 : 0.60;
-                if (hovered && n.id === hovered.id) a = 0.98;
-
-                if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
-                    a *= dimK;
-                }
-
-                if (a <= 0.01) continue;
-
-                ctx.lineJoin = 'round';
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = `rgba(${bgSolid.r},${bgSolid.g},${bgSolid.b},${clamp(0.85 * a, 0.2, 0.95)})`;
-                ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${a})`;
-
-                const x = n.x + n.r + 6;
-                const y = n.y - n.r - 2;
-                ctx.strokeText(n.label, x, y);
-                ctx.fillText(n.label, x, y);
-                continue;
-            }
-
-            let labelAlpha = clamp(0.8 - (n.depth - 1) * 0.15, 0.3, 0.8);
-
-            if (hoverIntensity > 0 && hovered && n.groupKey !== hovered.groupKey) {
-                labelAlpha *= dimK;
-            }
-
-            ctx.fillStyle = `${labelPrefix}${labelAlpha})`;
-            ctx.fillText(n.label, n.x + n.r + 6, n.y - n.r - 2);
         }
     }
 }
