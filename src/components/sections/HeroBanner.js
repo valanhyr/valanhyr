@@ -72,6 +72,17 @@ export class HeroBanner extends BaseComponent {
                     min-width: 0;
                 }
 
+                /* If a long headline would overflow, tighten the scale a bit on desktop. */
+                h1.is-tight {
+                    font-size: clamp(2.3rem, 7vw, 5rem);
+                    letter-spacing: -0.03em;
+                }
+
+                h1.is-tighter {
+                    font-size: clamp(2.1rem, 6.2vw, 4.5rem);
+                    letter-spacing: -0.02em;
+                }
+
                 .typewriter {
                     display: inline-block;
                     max-width: 100%;
@@ -197,15 +208,31 @@ export class HeroBanner extends BaseComponent {
 
                 const h1 = sr.querySelector('h1');
                 const tw = sr.querySelector('.typewriter');
-                if (!h1 || !tw || !tw.classList) return;
+                if (!h1 || !tw || !tw.classList || !h1.classList) return;
+
+                const getH1Width = () => (typeof h1.getBoundingClientRect === 'function'
+                    ? h1.getBoundingClientRect().width
+                    : h1.clientWidth);
+
+                const overflows = () => {
+                    const w = getH1Width();
+                    return w ? (tw.scrollWidth > w + 1) : false;
+                };
 
                 tw.classList.remove('is-wrapping');
+                h1.classList.remove('is-tight', 'is-tighter');
 
-                const h1Width = typeof h1.getBoundingClientRect === 'function'
-                    ? h1.getBoundingClientRect().width
-                    : h1.clientWidth;
+                // Try keeping a single-line typewriter by tightening scale a bit.
+                if (overflows()) {
+                    h1.classList.add('is-tight');
+                }
+                if (overflows()) {
+                    h1.classList.add('is-tighter');
+                }
 
-                if (h1Width && tw.scrollWidth > h1Width + 1) {
+                // If it still doesn't fit, fall back to wrapping (no animation).
+                if (overflows()) {
+                    h1.classList.remove('is-tight', 'is-tighter');
                     tw.classList.add('is-wrapping');
                 }
             } catch {
