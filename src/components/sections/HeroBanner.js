@@ -33,12 +33,30 @@ export class HeroBanner extends BaseComponent {
                 .stage {
                     position: relative;
                     height: 440px;
-                    border: 1px solid var(--glass-border);
-                    border-radius: var(--radius-lg);
                     background: var(--bg);
                     overflow: hidden;
-                    box-shadow: inset 0 0 50px rgba(0, 255, 204, 0.05),
-                                0 10px 30px var(--shadow-dark);
+                }
+
+                .stage::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    pointer-events: none;
+                    background:
+                        radial-gradient(
+                            120% 120% at 50% 50%,
+                            transparent 0%,
+                            transparent 55%,
+                            color-mix(in srgb, var(--bg) 85%, transparent) 78%,
+                            var(--bg) 100%
+                        ),
+                        linear-gradient(
+                            to bottom,
+                            var(--bg) 0%,
+                            transparent 14%,
+                            transparent 86%,
+                            var(--bg) 100%
+                        );
                 }
 
                 particle-graph {
