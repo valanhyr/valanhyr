@@ -75,11 +75,26 @@ export class HeroBanner extends BaseComponent {
                     overflow: hidden;
                     border-right: 4px solid var(--primary);
                     white-space: nowrap;
-                    animation: 
+                    animation:
                         typing 3s steps(40, end),
                         blink-caret .75s step-end infinite;
                     max-width: fit-content;
                     padding-right: 0.1em;
+                }
+
+                /*
+                  If the headline is too long for the available width, fall back
+                  to wrapping (no typewriter animation) instead of overflowing.
+                */
+                .typewriter.is-wrapping {
+                    white-space: normal;
+                    overflow: visible;
+                    animation: none;
+                    border-right: none;
+                    max-width: 100%;
+                    overflow-wrap: anywhere;
+                    word-break: break-word;
+                    display: inline;
                 }
 
                 @keyframes typing {
@@ -124,10 +139,15 @@ export class HeroBanner extends BaseComponent {
                     .stage { height: 340px; }
                     h1 { font-size: clamp(2rem, 10vw, 3.5rem); }
                     .content { margin-top: 2rem; }
-                    .typewriter { 
-                        white-space: normal; 
+                    .typewriter {
+                        white-space: normal;
                         border-right: none;
                         animation: none;
+                        max-width: 100%;
+                        overflow: visible;
+                        overflow-wrap: anywhere;
+                        word-break: break-word;
+                        display: inline;
                     }
                 }
                 @media (max-width: 480px) {
@@ -164,6 +184,24 @@ export class HeroBanner extends BaseComponent {
                 </div>
             </section>
         `);
+
+        // Avoid horizontal overflow for long headlines on wide screens.
+        // (Tests use very minimal shadowRoot mocks, so guard DOM APIs.)
+        try {
+            const sr = this.shadowRoot;
+            if (sr && typeof sr.querySelector === 'function') {
+                const h1 = sr.querySelector('h1');
+                const tw = sr.querySelector('.typewriter');
+                if (h1 && tw && tw.classList) {
+                    tw.classList.remove('is-wrapping');
+                    if (tw.scrollWidth > h1.clientWidth) {
+                        tw.classList.add('is-wrapping');
+                    }
+                }
+            }
+        } catch {
+            // no-op
+        }
     }
 }
 
