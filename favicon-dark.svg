@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>CV Chip (Dark)</title>
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#08080c"/>
+  <rect x="8" y="8" width="48" height="48" rx="12" fill="none" stroke="#00ffcc" stroke-width="4"/>
+
+  <!-- C (mint) -->
+  <path d="M30 24C25.5 24 22.5 27.4 22.5 32C22.5 36.6 25.5 40 30 40C32.6 40 34.7 39 36.2 37.2"
+        fill="none" stroke="#00ffcc" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- V (rose) -->
+  <path d="M41 24L36.2 40H33.8L29 24"
+        fill="none" stroke="#ff0055" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
