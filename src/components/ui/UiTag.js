@@ -20,8 +20,10 @@ export class UiTag extends BaseComponent {
         this.render(`
             <style>
                 :host { 
-                    display: inline-block; 
+                    display: inline-block;
                     vertical-align: middle;
+                    max-width: 100%;
+                    min-width: 0;
                 }
 
                 .tag {
@@ -37,7 +39,13 @@ export class UiTag extends BaseComponent {
                     border: 1px solid var(--glass-border);
                     background: var(--surface-2);
                     color: var(--text-dim);
+
+                    /* Prevent long tag text from causing horizontal overflow */
+                    max-width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     white-space: nowrap;
+
                     transition: all var(--dur) var(--ease);
 
                     /* Cyber-Chip Shape */
