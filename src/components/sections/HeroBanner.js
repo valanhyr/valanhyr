@@ -68,18 +68,21 @@ export class HeroBanner extends BaseComponent {
                     letter-spacing: -0.04em;
                     color: var(--text);
                     text-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+                    max-width: 100%;
+                    min-width: 0;
                 }
 
                 .typewriter {
                     display: inline-block;
+                    max-width: 100%;
+                    width: 0;
                     overflow: hidden;
                     border-right: 4px solid var(--primary);
                     white-space: nowrap;
-                    animation:
-                        typing 3s steps(40, end),
-                        blink-caret .75s step-end infinite;
-                    max-width: fit-content;
                     padding-right: 0.1em;
+                    animation:
+                        typing 3s steps(40, end) forwards,
+                        blink-caret .75s step-end infinite;
                 }
 
                 /*
@@ -186,21 +189,39 @@ export class HeroBanner extends BaseComponent {
         `);
 
         // Avoid horizontal overflow for long headlines on wide screens.
-        // (Tests use very minimal shadowRoot mocks, so guard DOM APIs.)
-        try {
-            const sr = this.shadowRoot;
-            if (sr && typeof sr.querySelector === 'function') {
+        // Re-check after layout/fonts to prevent late overflow once web fonts load.
+        const updateTypewriterWrapping = () => {
+            try {
+                const sr = this.shadowRoot;
+                if (!sr || typeof sr.querySelector !== 'function') return;
+
                 const h1 = sr.querySelector('h1');
                 const tw = sr.querySelector('.typewriter');
-                if (h1 && tw && tw.classList) {
-                    tw.classList.remove('is-wrapping');
-                    if (tw.scrollWidth > h1.clientWidth) {
-                        tw.classList.add('is-wrapping');
-                    }
+                if (!h1 || !tw || !tw.classList) return;
+
+                tw.classList.remove('is-wrapping');
+
+                const h1Width = typeof h1.getBoundingClientRect === 'function'
+                    ? h1.getBoundingClientRect().width
+                    : h1.clientWidth;
+
+                if (h1Width && tw.scrollWidth > h1Width + 1) {
+                    tw.classList.add('is-wrapping');
                 }
+            } catch {
+                // no-op
             }
-        } catch {
-            // no-op
+        };
+
+        updateTypewriterWrapping();
+        if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(updateTypewriterWrapping);
+        }
+        if (typeof setTimeout === 'function') {
+            setTimeout(updateTypewriterWrapping, 0);
+        }
+        if (typeof document !== 'undefined' && document.fonts?.ready) {
+            document.fonts.ready.then(updateTypewriterWrapping).catch(() => {});
         }
     }
 }
