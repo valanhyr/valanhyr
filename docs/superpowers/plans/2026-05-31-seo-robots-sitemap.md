@@ -145,8 +145,6 @@ git commit -m "seo: add robots.txt" -m "Co-authored-by: Copilot <223556219+Copil
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://valanhyr.pages.dev/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
   </url>
 </urlset>
 ```

@@ -6,10 +6,7 @@ Date: 2026-05-31
 This is a single-page CV site deployed at:
 - Canonical URL: https://valanhyr.pages.dev/
 
-The site already includes:
-- `meta description`
-- `link rel="canonical"`
-- JSON-LD structured data (`Person`, `ProfilePage`, `WebSite`)
+This change is part of a broader **"professional head"** package (meta description, canonical URL, and JSON-LD structured data for `Person`, `ProfilePage`, `WebSite`). Those items are already implemented in this branch; this spec focuses on adding explicit crawler directives and sitemap discoverability.
 
 ## Goals
 - Make crawler directives explicit (index/follow) without blocking common previews.
@@ -28,8 +25,6 @@ Add:
 - `<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">`
 - `<link rel="sitemap" type="application/xml" href="/sitemap.xml">`
 
-(Keep existing canonical + JSON-LD.)
-
 ### 2) `robots.txt` (repo root)
 Create `robots.txt` with:
 - `User-agent: *`
@@ -37,9 +32,11 @@ Create `robots.txt` with:
 - `Sitemap: https://valanhyr.pages.dev/sitemap.xml`
 
 ### 3) `sitemap.xml` (repo root)
-Create a minimal sitemap containing the canonical homepage URL.
+Create a truly minimal sitemap containing only the canonical homepage URL.
 
 ## Validation
-- Ensure `robots.txt` and `sitemap.xml` are present at the site root in the deployed environment.
-- Quick sanity check: open `https://valanhyr.pages.dev/robots.txt` and `.../sitemap.xml` after deployment.
-- Run existing Node tests to ensure no regression.
+- A small Node test (`tests/seo/head.test.js`) validates `index.html` contains the expected robots meta + sitemap link.
+- Run full tests: `node --test .\tests\**\*.test.js`
+- After deploy, sanity-check endpoints:
+  - `https://valanhyr.pages.dev/robots.txt`
+  - `https://valanhyr.pages.dev/sitemap.xml`
