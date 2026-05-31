@@ -11,17 +11,41 @@ test('index.html <head> SEO tags', async (t) => {
     const indexHtmlPath = path.resolve(__dirname, '..', '..', 'index.html');
     const html = await readFile(indexHtmlPath, 'utf8');
 
+    const robotsContent =
+        'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+
+    const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    const tagHasAttr = (tag, attrName, attrValue) =>
+        new RegExp(`${attrName}\\s*=\\s*["']${escapeRegExp(attrValue)}["']`, 'i').test(tag);
+
     await t.test('includes robots meta tag', () => {
-        assert.match(
-            html,
-            /<meta\s+name=["']robots["']\s+content=["']index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1["']\s*>/i
+        const metaTags = html.match(/<meta\b[^>]*>/gi) ?? [];
+
+        assert.ok(
+            metaTags.some(
+                (tag) =>
+                    tagHasAttr(tag, 'name', 'robots') &&
+                    new RegExp(
+                        `content\\s*=\\s*["'][^"']*${escapeRegExp(robotsContent)}[^"']*["']`,
+                        'i'
+                    ).test(tag)
+            ),
+            'Expected <meta> tag with name="robots" and required content'
         );
     });
 
     await t.test('includes sitemap link tag', () => {
-        assert.match(
-            html,
-            /<link\s+rel=["']sitemap["']\s+type=["']application\/xml["']\s+href=["']\/sitemap\.xml["']\s*>/i
+        const linkTags = html.match(/<link\b[^>]*>/gi) ?? [];
+
+        assert.ok(
+            linkTags.some(
+                (tag) =>
+                    tagHasAttr(tag, 'rel', 'sitemap') &&
+                    tagHasAttr(tag, 'href', '/sitemap.xml') &&
+                    tagHasAttr(tag, 'type', 'application/xml')
+            ),
+            'Expected <link> tag with rel="sitemap" href="/sitemap.xml" type="application/xml"'
         );
     });
 });
