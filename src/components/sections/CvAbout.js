@@ -84,23 +84,23 @@ export class CvAbout extends BaseComponent {
             </style>
 
             <section id="about" aria-label="About">
-                <ui-card>
-                    <div class="top">
-                        <h2>${title}</h2>
-                        <div class="hint">CV / Summary</div>
-                    </div>
+                <div class="top">
+                    <h2>${title}</h2>
+                    <div class="hint">CV / Summary</div>
+                </div>
 
-                    <div class="grid">
-                        <div>
-                            ${paragraphs.map(p => `<p>${p}</p>`).join('')}
-                        </div>
-                        <div>
+                <div class="grid">
+                    <div>
+                        ${paragraphs.map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                    <div>
+                        <ui-card>
                             <ul>
                                 ${highlights.map(h => `<li>${h}</li>`).join('')}
                             </ul>
-                        </div>
+                        </ui-card>
                     </div>
-                </ui-card>
+                </div>
             </section>
         `);
     }

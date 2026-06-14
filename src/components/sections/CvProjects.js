@@ -215,53 +215,51 @@ export class CvProjects extends BaseComponent {
             </style>
 
             <section id="projects" aria-label="Projects">
-                <ui-card>
-                    <div class="top">
-                        <h2>Projects</h2>
-                        <div class="hint">CV // System Portfolio</div>
-                    </div>
+                <div class="top">
+                    <h2>Projects</h2>
+                    <div class="hint">CV // System Portfolio</div>
+                </div>
 
-                    <div class="accordion">
-                        ${items.length ? items.map((p, index) => {
-                            const title = p.title || p.name || 'Project';
-                            const imageUrl = p.mainImage ? SanityService.urlFor(p.mainImage).width(400).url() : null;
-                            const bgStyle = imageUrl ? `style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"` : '';
+                <div class="accordion">
+                    ${items.length ? items.map((p, index) => {
+                        const title = p.title || p.name || 'Project';
+                        const imageUrl = p.mainImage ? SanityService.urlFor(p.mainImage).width(400).url() : null;
+                        const bgStyle = imageUrl ? `style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"` : '';
 
-                            return `
-                                <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
-                                    <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
-                                    <div class="card-bg" ${bgStyle}></div>
-                                    <div class="card-content">
-                                        <h3>${title}</h3>
-                                        <p>${p.description ?? ''}</p>
-                                        ${Array.isArray(p.stack) && p.stack.length ? `
-                                            <div class="stack">
-                                                ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
-                                            </div>
-                                        ` : ''}
-                                        <div class="links">
-                                            ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('') : `
-                            <div class="project-card active">
-                                <div class="card-label">PROTO.SITE</div>
-                                <div class="card-bg"></div>
+                        return `
+                            <div class="project-card ${index === 0 ? 'active' : ''}" onclick="this.parentElement.querySelectorAll('.project-card').forEach(c => c.classList.remove('active')); this.classList.add('active')">
+                                <div class="card-label">PROJECT ${String(index + 1).padStart(2, '0')}</div>
+                                <div class="card-bg" ${bgStyle}></div>
                                 <div class="card-content">
-                                    <h3>Cyberpunk Portfolio</h3>
-                                    <p>High-performance CV built with Vanilla Web Components and Neumorphic design.</p>
-                                    <div class="stack">
-                                        <ui-tag variant="secondary">Vanilla JS</ui-tag>
-                                        <ui-tag variant="secondary">CSS3</ui-tag>
-                                        <ui-tag variant="secondary">MCP</ui-tag>
+                                    <h3>${title}</h3>
+                                    <p>${p.description ?? ''}</p>
+                                    ${Array.isArray(p.stack) && p.stack.length ? `
+                                        <div class="stack">
+                                            ${p.stack.map(s => `<ui-tag variant="secondary">${s}</ui-tag>`).join('')}
+                                        </div>
+                                    ` : ''}
+                                    <div class="links">
+                                        ${(Array.isArray(p.links) ? p.links : []).map(l => `<ui-button href="${l.href}" target="_blank">${l.label}</ui-button>`).join('')}
                                     </div>
                                 </div>
                             </div>
-                        `}
-                    </div>
-                </ui-card>
+                        `;
+                    }).join('') : `
+                        <div class="project-card active">
+                            <div class="card-label">PROTO.SITE</div>
+                            <div class="card-bg"></div>
+                            <div class="card-content">
+                                <h3>Cyberpunk Portfolio</h3>
+                                <p>High-performance CV built with Vanilla Web Components and Neumorphic design.</p>
+                                <div class="stack">
+                                    <ui-tag variant="secondary">Vanilla JS</ui-tag>
+                                    <ui-tag variant="secondary">CSS3</ui-tag>
+                                    <ui-tag variant="secondary">MCP</ui-tag>
+                                </div>
+                            </div>
+                        </div>
+                    `}
+                </div>
             </section>
         `);
     }

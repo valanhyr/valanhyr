@@ -149,38 +149,36 @@ export class CvSkills extends BaseComponent {
             </style>
 
             <section id="skills" aria-label="Skills">
-                <ui-card>
-                    <div class="top">
-                        <h2>Skills</h2>
-                        <div class="hint">CV // Stack Overview</div>
-                    </div>
+                <div class="top">
+                    <h2>Skills</h2>
+                    <div class="hint">CV // Stack Overview</div>
+                </div>
 
-                    <div class="grid">
-                        ${groupEntries.length ? groupEntries.map(([key, val]) => {
-                            const leaves = collectLeaves(val, []).slice(0, 14);
-                            return `
-                                <div class="box">
-                                    <div class="boxTop">
-                                        <h3>${String(key)}</h3>
-                                        <div class="meta">${collectLeaves(val, []).length} items</div>
-                                    </div>
-                                    <div class="chips">
-                                        ${leaves.map((s, i) => `<ui-tag interactive style="animation-delay: ${i * 0.05}s">${s}</ui-tag>`).join('')}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('') : `
+                <div class="grid">
+                    ${groupEntries.length ? groupEntries.map(([key, val]) => {
+                        const leaves = collectLeaves(val, []).slice(0, 14);
+                        return `
                             <div class="box">
-                                <h3>frontend</h3>
+                                <div class="boxTop">
+                                    <h3>${String(key)}</h3>
+                                    <div class="meta">${collectLeaves(val, []).length} items</div>
+                                </div>
                                 <div class="chips">
-                                    <ui-tag interactive>HTML</ui-tag>
-                                    <ui-tag interactive>CSS</ui-tag>
-                                    <ui-tag interactive>JavaScript</ui-tag>
+                                    ${leaves.map((s, i) => `<ui-tag interactive style="animation-delay: ${i * 0.05}s">${s}</ui-tag>`).join('')}
                                 </div>
                             </div>
-                        `}
-                    </div>
-                </ui-card>
+                        `;
+                    }).join('') : `
+                        <div class="box">
+                            <h3>frontend</h3>
+                            <div class="chips">
+                                <ui-tag interactive>HTML</ui-tag>
+                                <ui-tag interactive>CSS</ui-tag>
+                                <ui-tag interactive>JavaScript</ui-tag>
+                            </div>
+                        </div>
+                    `}
+                </div>
             </section>
         `);
     }

@@ -132,21 +132,21 @@ export class CvPlatform extends BaseComponent {
             </style>
 
             <section id="platform" aria-label="Platform and Architecture">
-                <ui-card>
-                    <div class="top">
-                        <h2>${title}</h2>
-                        <div class="hint">CV // System Architecture</div>
-                    </div>
+                <div class="top">
+                    <h2>${title}</h2>
+                    <div class="hint">CV // System Architecture</div>
+                </div>
 
-                    <div class="blueprint">
-                        <div class="visual">
-                            <div class="core-box">CORE_SYS</div>
-                        </div>
+                <div class="blueprint">
+                    <div class="visual">
+                        <div class="core-box">CORE_SYS</div>
+                    </div>
+                    <ui-card surface="2">
                         <ul>
                             ${bullets.map(b => `<li>${b}</li>`).join('')}
                         </ul>
-                    </div>
-                </ui-card>
+                    </ui-card>
+                </div>
             </section>
         `);
     }

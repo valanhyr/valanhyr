@@ -12,13 +12,13 @@ export class HomeView extends BaseComponent {
         this.render(`
             <style>
                 :host { display: block; }
-                main {
+                main.content-sections {
                     max-width: 1100px;
                     margin: 0 auto;
                     display: grid;
-                    gap: var(--space-xl);
-                    padding-top: 80px;
-                    padding-bottom: var(--space-xl);
+                    gap: 5rem; /* Espacio equilibrado entre secciones */
+                    padding-top: 0;
+                    padding-bottom: 4rem;
                 }
 
                 @media (max-width: 768px) {
@@ -39,7 +39,7 @@ export class HomeView extends BaseComponent {
                 }
             </style>
 
-            <main id="top">
+            <main id="top" class="content-sections">
                 <hero-banner></hero-banner>
                 <cv-about id="about" class="reveal-hidden"></cv-about>
                 <cv-platform id="platform" class="reveal-hidden"></cv-platform>
