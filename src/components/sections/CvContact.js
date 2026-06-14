@@ -73,42 +73,40 @@ export class CvContact extends BaseComponent {
             </style>
 
             <section id="contact" aria-label="Contact">
-                <ui-card>
-                    <div class="top">
-                        <h2>Contact</h2>
-                        <div class="hint">CV // System Reach-out</div>
-                    </div>
+                <div class="top">
+                    <h2>Contact</h2>
+                    <div class="hint">CV // System Reach-out</div>
+                </div>
 
-                    <div class="grid">
-                        <ui-card surface="2">
-                            <div class="stack">
-                                <div class="cta">${cta}</div>
-                                <div>
-                                    <div class="label">Primary Channel</div>
-                                    <div class="email-val">${email}</div>
-                                </div>
-                                <div class="row">
-                                    <ui-button variant="primary" href="mailto:${email}">Send Transmission</ui-button>
+                <div class="grid">
+                    <ui-card surface="2">
+                        <div class="stack">
+                            <div class="cta">${cta}</div>
+                            <div>
+                                <div class="label">Primary Channel</div>
+                                <div class="email-val">${email}</div>
+                            </div>
+                            <div class="row">
+                                <ui-button variant="primary" href="mailto:${email}">Send Transmission</ui-button>
+                            </div>
+                        </div>
+                    </ui-card>
+                    
+                    <ui-card surface="2">
+                        <div class="stack">
+                            <div>
+                                <div class="label">Technical Links</div>
+                                <div class="row" style="margin-top: 0.5rem;">
+                                    ${(Array.isArray(cv?.links) ? cv.links : []).slice(0, 4).map(l => `<ui-button href="${l.href}">${l.label}</ui-button>`).join('')}
                                 </div>
                             </div>
-                        </ui-card>
-                        
-                        <ui-card surface="2">
-                            <div class="stack">
-                                <div>
-                                    <div class="label">Technical Links</div>
-                                    <div class="row" style="margin-top: 0.5rem;">
-                                        ${(Array.isArray(cv?.links) ? cv.links : []).slice(0, 4).map(l => `<ui-button href="${l.href}">${l.label}</ui-button>`).join('')}
-                                    </div>
-                                </div>
-                                <div style="margin-top: auto; opacity: 0.4; font-size: 0.8rem; font-family: var(--font-mono);">
-                                    SYSTEM.STATUS: READY<br>
-                                    LOCATION: ${cv?.basics?.location ?? 'REMOTE'}
-                                </div>
+                            <div style="margin-top: auto; opacity: 0.4; font-size: 0.8rem; font-family: var(--font-mono);">
+                                SYSTEM.STATUS: READY<br>
+                                LOCATION: ${cv?.basics?.location ?? 'REMOTE'}
                             </div>
-                        </ui-card>
-                    </div>
-                </ui-card>
+                        </div>
+                    </ui-card>
+                </div>
             </section>
         `);
     }

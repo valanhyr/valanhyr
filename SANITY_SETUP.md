@@ -7,17 +7,17 @@ Este repo (portfolio) lee contenido desde Sanity con GROQ. Para que “salga tod
 
 ---
 
-## 1) Crear el proyecto (en otro repo)
+## 1) Crear el proyecto (o usar el existente)
 
-En una carpeta nueva:
+Proyecto actual: **valanhyr**
+- **Project ID:** `hlfbx6im`
+- **Dataset:** `production`
+
+Si necesitas configurar el Studio en una carpeta nueva:
 
 ```bash
-npm create sanity@latest .
+npm create sanity@latest . --project hlfbx6im --dataset production
 ```
-
-Recomendado en el wizard:
-- Dataset: `production`
-- Template: **Clean project**
 
 ---
 

@@ -24,7 +24,10 @@ export class HeroBanner extends BaseComponent {
 
         this.render(`
             <style>
-                :host { display: block; }
+                :host { 
+                    display: block; 
+                    padding-top: 80px; /* Offset for fixed header */
+                }
 
                 .hero {
                     margin-bottom: var(--space-xl);

@@ -84,47 +84,45 @@ export class CvEducation extends BaseComponent {
             </style>
 
             <section id="education" aria-label="Education">
-                <ui-card>
-                    <div class="top">
-                        <h2>Education</h2>
-                        <div class="hint">CV // Academic Uplinks</div>
-                    </div>
+                <div class="top">
+                    <h2>Education</h2>
+                    <div class="hint">CV // Academic Uplinks</div>
+                </div>
 
-                    <div class="grid">
-                        ${items.length ? items.map(ed => `
-                            <ui-card surface="2" interactive>
-                                <div class="item-content">
-                                    <div class="row">
-                                        <div>
-                                            <div class="org">${ed.org ?? 'Institution'}</div>
-                                            <div class="title">${ed.title ?? 'Degree / Certification'}</div>
-                                        </div>
-                                        <div class="period">${ed.period ?? 'YYYY'}</div>
+                <div class="grid">
+                    ${items.length ? items.map(ed => `
+                        <ui-card surface="2" interactive>
+                            <div class="item-content">
+                                <div class="row">
+                                    <div>
+                                        <div class="org">${ed.org ?? 'Institution'}</div>
+                                        <div class="title">${ed.title ?? 'Degree / Certification'}</div>
                                     </div>
-                                    ${(Array.isArray(ed.details) && ed.details.length) ? `
-                                        <ul>${ed.details.slice(0, 4).map(d => `<li>${d}</li>`).join('')}</ul>
-                                    ` : ''}
+                                    <div class="period">${ed.period ?? 'YYYY'}</div>
                                 </div>
-                            </ui-card>
-                        `).join('') : `
-                            <ui-card surface="2" interactive>
-                                <div class="item-content">
-                                    <div class="row">
-                                        <div>
-                                            <div class="org">University / Academy</div>
-                                            <div class="title">Computer Science / Software Systems</div>
-                                        </div>
-                                        <div class="period">2019 — 2023</div>
+                                ${(Array.isArray(ed.details) && ed.details.length) ? `
+                                    <ul>${ed.details.slice(0, 4).map(d => `<li>${d}</li>`).join('')}</ul>
+                                ` : ''}
+                            </div>
+                        </ui-card>
+                    `).join('') : `
+                        <ui-card surface="2" interactive>
+                            <div class="item-content">
+                                <div class="row">
+                                    <div>
+                                        <div class="org">University / Academy</div>
+                                        <div class="title">Computer Science / Software Systems</div>
                                     </div>
-                                    <ul>
-                                        <li>Advanced algorithms & data structure optimization.</li>
-                                        <li>Full-stack architecture & distributed systems.</li>
-                                    </ul>
+                                    <div class="period">2019 — 2023</div>
                                 </div>
-                            </ui-card>
-                        `}
-                    </div>
-                </ui-card>
+                                <ul>
+                                    <li>Advanced algorithms & data structure optimization.</li>
+                                    <li>Full-stack architecture & distributed systems.</li>
+                                </ul>
+                            </div>
+                        </ui-card>
+                    `}
+                </div>
             </section>
         `);
     }

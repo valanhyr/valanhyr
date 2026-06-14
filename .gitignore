@@ -1,3 +1,8 @@
 .worktrees/
 .superpowers/
 package-lock.json
+SANITY_DATA_EXPORT.ndjson
+SANITY_SETUP.md
+docs/PROFILE_MASTER.md
+docs/TECHNICAL_CHECK.md
+SANITY_SETUP.md

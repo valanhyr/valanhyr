@@ -231,38 +231,36 @@ export class CvExperience extends BaseComponent {
             </style>
 
             <section id="experience" aria-label="Experience">
-                <ui-card>
-                    <div class="top">
-                        <h2>Experience</h2>
-                        <div class="hint">CV // System Timeline</div>
-                    </div>
+                <div class="top">
+                    <h2>Experience</h2>
+                    <div class="hint">CV / System Timeline</div>
+                </div>
 
-                    <div class="timeline">
-                        <div class="progress-line"></div>
-                        ${items.length ? items.map(it => `
-                            <div class="timeline-slot">
-                                <span class="node"></span>
-                                <article class="item">
-                                    <div class="row">
-                                        <div>
-                                            <div class="company">${it.company ?? 'Company'}</div>
-                                            <div class="role">${it.role ?? 'Role'}</div>
-                                        </div>
-                                        <div class="period">${it.period ?? 'YYYY — YYYY'} • ${it.location ?? 'Remote'}</div>
+                <div class="timeline">
+                    <div class="progress-line"></div>
+                    ${items.length ? items.map(it => `
+                        <div class="timeline-slot">
+                            <span class="node"></span>
+                            <article class="item">
+                                <div class="row">
+                                    <div>
+                                        <div class="company">${it.company ?? 'Company'}</div>
+                                        <div class="role">${it.role ?? 'Role'}</div>
                                     </div>
-                                    <ul>
-                                        ${(Array.isArray(it.achievements) ? it.achievements : []).slice(0, 6).map(a => `<li>${a}</li>`).join('')}
-                                    </ul>
-                                    ${Array.isArray(it.stack) && it.stack.length ? `
-                                        <div class="stack">
-                                            ${it.stack.map(s => `<ui-tag variant="default">${s}</ui-tag>`).join('')}
-                                        </div>
-                                    ` : ''}
-                                </article>
-                            </div>
-                        `).join('') : ''}
-                    </div>
-                </ui-card>
+                                    <div class="period">${it.period ?? 'YYYY — YYYY'} • ${it.location ?? 'Remote'}</div>
+                                </div>
+                                <ul>
+                                    ${(Array.isArray(it.achievements) ? it.achievements : []).slice(0, 6).map(a => `<li>${a}</li>`).join('')}
+                                </ul>
+                                ${Array.isArray(it.stack) && it.stack.length ? `
+                                    <div class="stack">
+                                        ${it.stack.map(s => `<ui-tag variant="default">${s}</ui-tag>`).join('')}
+                                    </div>
+                                ` : ''}
+                            </article>
+                        </div>
+                    `).join('') : ''}
+                </div>
             </section>
         `);
     }
